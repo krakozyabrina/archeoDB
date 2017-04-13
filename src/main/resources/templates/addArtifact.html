@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Форма добавления находки</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"/>
+    <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css"/>
+    <script defer="true" src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+    <style>
+        body {
+            background-color: #f1f1f1;
+        }
+        .mdl-card {
+            padding: 20px;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+    <main class="mdl-layout__content">
+        <div class="page-content">
+
+            <div class="mdl-grid">
+                <div class="mdl-cell mdl-cell--4-col">
+
+                    <div class="mdl-card mdl-shadow--2dp">
+                        <div class="mdl-card__title">
+                            <h2 class="mdl-card__title-text">Новая находка</h2>
+                        </div>
+                        <div>
+                            <form action="#" th:action="@{/addArtifact}" th:object="${artifact}" method="post">
+                                <p>
+                                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                    <input id="a_id" class="mdl-textfield__input" type="text" th:field="*{id}"/>
+                                    <label class="mdl-textfield__label" for="a_id">Номер в описи</label>
+                                </div>
+                                </p><p>
+                                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                    <input id="a_title" class="mdl-textfield__input" type="text" th:field="*{title}"/>
+                                    <label class="mdl-textfield__label" for="a_title">Предмет</label>
+                                </div>
+                                </p><p>
+                                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                    <input id="a_descr" class="mdl-textfield__input" type="text" th:field="*{description}"/>
+                                    <label class="mdl-textfield__label" for="a_descr">Описание</label>
+                                </div>
+                                </p><p>
+                                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                    <input id="a_sizeX" class="mdl-textfield__input" type="number" th:field="*{sizeX}"/>
+                                    <label class="mdl-textfield__label" for="a_sizeX">Размер_X</label>
+                                </div>
+                                </p><p>
+                                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                    <input id="a_sizeY" class="mdl-textfield__input" type="number" th:field="*{sizeY}"/>
+                                    <label class="mdl-textfield__label" for="a_sizeY">Размер_Y</label>
+                                </div>
+                                </p><p>
+                                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                    <input id="a_sizeZ" class="mdl-textfield__input" type="number" th:field="*{sizeZ}"/>
+                                    <label class="mdl-textfield__label" for="a_sizeZ">Размер_Z</label>
+                                </div>
+                                </p>
+                                <p>
+                                    <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--primary"
+                                            type="submit">
+                                        Сохранить
+                                    </button>
+                                    <button class="mdl-button mdl-js-button mdl-button--raised" type="reset">
+                                        Отменить
+                                    </button>
+                                </p>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mdl-cell mdl-cell--6-col">
+
+                    <div class="mdl-card mdl-shadow--2dp">
+                        <div class="mdl-card__title">
+                            <h2 class="mdl-card__title-text">Все находки в БД</h2>
+                        </div>
+                        <div>
+                            <table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable">
+                                <thead>
+                                <tr>
+                                    <th>Id</th>
+                                    <th class="mdl-data-table__cell--non-numeric">Title</th>
+                                    <th class="mdl-data-table__cell--non-numeric">Description</th>
+                                </tr>
+                                </thead>
+                                <tr th:each="artifact : ${artifacts}">
+                                    <td th:text="${artifact.id}"></td>
+                                    <td class="mdl-data-table__cell--non-numeric" th:text="${artifact.title}"></td>
+                                    <td class="mdl-data-table__cell--non-numeric" th:text="${artifact.description}"></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </main>
+</div>
+</body>
+
+</html>
