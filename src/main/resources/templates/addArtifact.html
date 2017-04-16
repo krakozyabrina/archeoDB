@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Форма добавления находки</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
@@ -25,6 +25,9 @@
                 <div class="mdl-cell mdl-cell--4-col">
 
                     <div class="mdl-card mdl-shadow--2dp">
+                        <form th:action="@{/logout}" method="post">
+                            <input type="submit" value="Выйти"/>
+                        </form>
                         <div class="mdl-card__title">
                             <h2 class="mdl-card__title-text">Новая находка</h2>
                         </div>
@@ -32,10 +35,11 @@
                             <form action="#" th:action="@{/addArtifact}" th:object="${artifact}" method="post">
                                 <p>
                                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                    <input id="a_id" class="mdl-textfield__input" type="text" th:field="*{id}"/>
+                                    <input id="a_id" class="mdl-textfield__input" type="number" th:field="*{id}"/>
                                     <label class="mdl-textfield__label" for="a_id">Номер в описи</label>
                                 </div>
-                                </p><p>
+                                </p>
+                                <p>
                                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
                                     <input id="a_title" class="mdl-textfield__input" type="text" th:field="*{title}"/>
                                     <label class="mdl-textfield__label" for="a_title">Предмет</label>
@@ -47,20 +51,92 @@
                                 </div>
                                 </p><p>
                                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                    <input id="a_sizeX" class="mdl-textfield__input" type="number" th:field="*{sizeX}"/>
+                                    <input id="a_find_date" class="mdl-textfield__input" type="date" th:field="*{findDateStr}"/>
+                                    <label class="mdl-textfield__label" for="a_find_date">Дата находки</label>
+                                </div>
+                                </p><p>
+                                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                    <input id="a_sizeX" class="mdl-textfield__input" type="number" th:field="*{sizex}"/>
                                     <label class="mdl-textfield__label" for="a_sizeX">Размер_X</label>
                                 </div>
                                 </p><p>
                                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                    <input id="a_sizeY" class="mdl-textfield__input" type="number" th:field="*{sizeY}"/>
+                                    <input id="a_sizeY" class="mdl-textfield__input" type="number" th:field="*{sizey}"/>
                                     <label class="mdl-textfield__label" for="a_sizeY">Размер_Y</label>
                                 </div>
                                 </p><p>
                                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                    <input id="a_sizeZ" class="mdl-textfield__input" type="number" th:field="*{sizeZ}"/>
+                                    <input id="a_sizeZ" class="mdl-textfield__input" type="number" th:field="*{sizez}"/>
                                     <label class="mdl-textfield__label" for="a_sizeZ">Размер_Z</label>
                                 </div>
+                                </p><p>
+                                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                    <input id="a_cipher" class="mdl-textfield__input" type="text" th:field="*{cipher}"/>
+                                    <label class="mdl-textfield__label" for="a_cipher">Шифр</label>
+                                </div>
+                                </p><p>
+                                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                    <input id="a_depth" class="mdl-textfield__input" type="number" th:field="*{depth}"/>
+                                    <label class="mdl-textfield__label" for="a_depth">Глубина(см)</label>
+                                </div>
+                                </p><p>
+                                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                    <input id="a_coord_north" class="mdl-textfield__input" type="number" th:field="*{coord_north}"/>
+                                    <label class="mdl-textfield__label" for="a_coord_north">Коорд_Север</label>
+                                </div>
+                                </p><p>
+                                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                    <input id="a_coord_west" class="mdl-textfield__input" type="number" th:field="*{coord_west}"/>
+                                    <label class="mdl-textfield__label" for="a_coord_west">Коорд_Запад</label>
+                                </div>
+                                </p><p>
+                                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                    <input id="a_material_id" class="mdl-textfield__input" type="number" th:field="*{material_id}"/>
+                                    <label class="mdl-textfield__label" for="a_material_id">Материал(идентификатор)</label>
+
+                                     <select id="a_material_id_">
+                                        <option value="1">MAt1</option>
+                                        <option value="2">MAt1</option>
+                                     </select>
+
+                                </div>
+                                </p><p>
+                                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                    <input id="a_square_id" class="mdl-textfield__input" type="number" th:field="*{square_id}"/>
+                                    <label class="mdl-textfield__label" for="a_square_id">Квадрат(идентификатор)</label>
+                                </div>
+                                </p><p>
+                                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                    <input id="a_epoch_id" class="mdl-textfield__input" type="number" th:field="*{epoch_id}"/>
+                                    <label class="mdl-textfield__label" for="a_epoch_id">Эпоха(идентификатор)</label>
+                                </div>
+                                </p><p>
+                                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                    <input id="a_layer_id" class="mdl-textfield__input" type="number" th:field="*{layer_id}"/>
+                                    <label class="mdl-textfield__label" for="a_layer_id">Слой(идентификатор)</label>
+                                </div>
+                                </p><p>
+                                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                    <input id="a_region_id" class="mdl-textfield__input" type="number" th:field="*{region_id}"/>
+                                    <label class="mdl-textfield__label" for="a_region_id">Регион(идентификатор)</label>
+                                </div>
+                                </p><p>
+                                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                    <input id="a_position_id" class="mdl-textfield__input" type="number" th:field="*{position_id}"/>
+                                    <label class="mdl-textfield__label" for="a_position_id">Должность(идентификатор)</label>
+                                </div>
+                                </p><p>
+                                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                    <input id="a_employee_id" class="mdl-textfield__input" type="number" th:field="*{employee_id}"/>
+                                    <label class="mdl-textfield__label" for="a_employee_id">Сотрудник(идентификатор)</label>
+                                </div>
+                                </p><p>
+                                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                    <input id="a_site_id" class="mdl-textfield__input" type="number" th:field="*{site_id}"/>
+                                    <label class="mdl-textfield__label" for="a_site_id">Памятник(идентификатор)</label>
+                                </div>
                                 </p>
+
                                 <p>
                                     <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--primary"
                                             type="submit">

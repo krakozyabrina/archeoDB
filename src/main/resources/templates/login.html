@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+    <title>Вход в archeo</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"/>
+    <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css"/>
+    <script defer="true" src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+    <style>
+        body {
+        background-color: #f1f1f1;
+        }
+        .mdl-card {
+        padding: 20px;
+        width: 100%;
+        }
+    </style>
+</head>
+<body>
+<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+    <main class="mdl-layout__content">
+        <div class="page-content">
+
+            <div class="mdl-grid">
+                <div class="mdl-cell mdl-cell--4-col">
+
+                    <div class="mdl-card mdl-shadow--2dp">
+                       <div th:if="${param.error}">
+                           Неправильное имя пользователя или пароль.
+                       </div>
+                       <div th:if="${param.logout}">
+                           Вы вышли из archeo.
+                       </div>
+                       <form th:action="@{/login}" method="post">
+                           <div><label> Имя пользователя : <input type="text" name="username"/> </label></div>
+                           <div><label> Пароль: <input type="password" name="password"/> </label></div>
+                           <div><input type="submit" value="Войти"/></div>
+                       </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+</body>
+</html>
