@@ -10,74 +10,43 @@
     <main class="mdl-layout__content mdl-color--grey-100">
         <div class="mdl-grid demo-content">
 
-                <div class="mdl-cell mdl-cell--4-col">
+            <div class="demo-cards mdl-color--white mdl-cell mdl-shadow--2dp mdl-cell--6-col">
 
-                    <div class="mdl-card mdl-shadow--2dp">
-                        <form th:action="@{/logout}" method="post">
-                            <input type="submit" value="Выйти"/>
-                        </form>
-                        <div class="mdl-card__title">
-                            <h5 class="mdl-card__title-text">Добавление информации в базу</h5>
-                        </div>
-                        <p><a href="/addArtifact">Добавить находки в базу</a></p>
-                        <p><a href="/addmaterial">Добавить материал</a></p>
-                        <p><a href="/addsquare">Добавить квадрат</a></p>
-                        <p><a href="/addepoch">Добавить эпоху</a></p>
-                        <p><a href="/addelayer">Добавить слой</a></p>
-                        <p><a href="/adderegion">Добавить регион</a></p>
-                        <p><a href="/addeposition">Добавить должность</a></p>
-                        <p><a href="/addemployee">Добавить сотрудника</a></p>
-                        <p><a href="/addsite">Добавить памятник</a></p>
-                    </div>
+                <div class="mdl-card__title mdl-card--expand mdl-color--teal-300">
+                    <h5 class="mdl-card__title-text">Добавление информации в базу</h5>
                 </div>
-                <div class="mdl-cell mdl-shadow--2dp mdl-cell--4-col">
+                <div class="mdl-card__supporting-text mdl-color-text--grey-600">
+                    <p><a href="/addArtifact">Добавить находки в базу</a></p>
+                    <p><a href="/addmaterial">Добавить материал</a></p>
+                    <p><a href="/addsquare">Добавить квадрат</a></p>
+                    <p><a href="/addepoch">Добавить эпоху</a></p>
+                    <p><a href="/addelayer">Добавить слой</a></p>
+                    <p><a href="/adderegion">Добавить регион</a></p>
+                    <p><a href="/addeposition">Добавить должность</a></p>
+                    <p><a href="/addemployee">Добавить сотрудника</a></p>
+                    <p><a href="/addsite">Добавить памятник</a></p>
+                </div>
 
-                    <div class="mdl-card__title">
-                        <h5 class="mdl-card__title-text">Получение информации из базы</h5>
-                    </div>
+            </div>
+            <div class="demo-cards mdl-color--white mdl-cell mdl-shadow--2dp mdl-cell--6-col">
+
+                <div class="mdl-card__title mdl-color--deep-purple-500">
+                    <h5 class="mdl-card__title-text">Получение информации из базы</h5>
+                </div>
+                <div class="mdl-card__supporting-text mdl-color-text--grey-600">
                     <p><a href="/fieldinventory">Полевая опись</a></p>
                     <p><a href="/count_artifacts_by_squares_on_depth">Количество находок по квадратам на заданной
                         глубине</a></p>
                     <p><a href="/count_artifacts_by_material">Количество находок по материалам</a></p>
                     <p><a href="/count_artifacts_by_employee">Количество находок по сотрудникам</a></p>
                     <p><a href="/find_employee_by_artifact_id">Найти сотрудника по номеру находки</a></p>
-
                 </div>
+            </div>
 
             <div class="demo-charts mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-grid">
-                <svg fill="currentColor" width="200px" height="200px" viewBox="0 0 1 1"
-                     class="demo-chart mdl-cell mdl-cell--4-col mdl-cell--3-col-desktop">
-                    <use xlink:href="#piechart" mask="url(#piemask)"/>
-                    <text x="0.5" y="0.5" font-family="Roboto" font-size="0.3" fill="#888" text-anchor="middle"
-                          dy="0.1">82
-                        <tspan font-size="0.2" dy="-0.07">%</tspan>
-                    </text>
-                </svg>
-                <svg fill="currentColor" width="200px" height="200px" viewBox="0 0 1 1"
-                     class="demo-chart mdl-cell mdl-cell--4-col mdl-cell--3-col-desktop">
-                    <use xlink:href="#piechart" mask="url(#piemask)"/>
-                    <text x="0.5" y="0.5" font-family="Roboto" font-size="0.3" fill="#888" text-anchor="middle"
-                          dy="0.1">82
-                        <tspan dy="-0.07" font-size="0.2">%</tspan>
-                    </text>
-                </svg>
-                <svg fill="currentColor" width="200px" height="200px" viewBox="0 0 1 1"
-                     class="demo-chart mdl-cell mdl-cell--4-col mdl-cell--3-col-desktop">
-                    <use xlink:href="#piechart" mask="url(#piemask)"/>
-                    <text x="0.5" y="0.5" font-family="Roboto" font-size="0.3" fill="#888" text-anchor="middle"
-                          dy="0.1">82
-                        <tspan dy="-0.07" font-size="0.2">%</tspan>
-                    </text>
-                </svg>
-                <svg fill="currentColor" width="200px" height="200px" viewBox="0 0 1 1"
-                     class="demo-chart mdl-cell mdl-cell--4-col mdl-cell--3-col-desktop">
-                    <use xlink:href="#piechart" mask="url(#piemask)"/>
-                    <text x="0.5" y="0.5" font-family="Roboto" font-size="0.3" fill="#888" text-anchor="middle"
-                          dy="0.1">82
-                        <tspan dy="-0.07" font-size="0.2">%</tspan>
-                    </text>
-                </svg>
+                <p>Hello World</p>
             </div>
+
             <div class="demo-graphs mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--8-col">
                 <svg fill="currentColor" viewBox="0 0 500 250" class="demo-graph">
                     <use xlink:href="#chart"/>
@@ -86,6 +55,7 @@
                     <use xlink:href="#chart"/>
                 </svg>
             </div>
+
             <div class="demo-cards mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet mdl-grid mdl-grid--no-spacing">
                 <div class="demo-updates mdl-card mdl-shadow--2dp mdl-cell mdl-cell--4-col mdl-cell--4-col-tablet mdl-cell--12-col-desktop">
                     <div class="mdl-card__title mdl-card--expand mdl-color--teal-300">
