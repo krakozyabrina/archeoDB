@@ -13,12 +13,6 @@ public class Artifact {
 
     private String description;
 
-    private Float sizeX;
-
-    private Float sizeY;
-
-    private Float sizeZ;
-
     private Date find_date;
 
     private Float sizex;
@@ -73,30 +67,6 @@ public class Artifact {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public Float getSizeX() {
-        return sizeX;
-    }
-
-    public void setSizeX(Float sizeX) {
-        this.sizeX = sizeX;
-    }
-
-    public Float getSizeY() {
-        return sizeY;
-    }
-
-    public void setSizeY(Float sizeY) {
-        this.sizeY = sizeY;
-    }
-
-    public Float getSizeZ() {
-        return sizeZ;
-    }
-
-    public void setSizeZ(Float sizeZ) {
-        this.sizeZ = sizeZ;
     }
 
     public Date getFind_date() {
@@ -259,9 +229,6 @@ public class Artifact {
                 "id=" + id +
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
-                ", sizeX=" + sizeX +
-                ", sizeY=" + sizeY +
-                ", sizeZ=" + sizeZ +
                 ", find_date=" + find_date +
                 ", sizex=" + sizex +
                 ", sizey=" + sizey +

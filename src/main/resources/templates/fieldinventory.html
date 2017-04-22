@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Полевая опись</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"/>
+    <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css"/>
+    <script defer="true" src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+    <style>
+        body {
+        background-color: #f1f1f1;
+        }
+        .mdl-card {
+        padding: 20px;
+        width: 100%;
+        }
+        .demo-card-square.mdl-card {
+        width: 450px;
+        height: 450px;
+        }
+        .demo-card-square > .mdl-card__title {
+        background-color: #f1f1f1;
+        }
+    </style>
+</head>
+<body>
+<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+    <main class="mdl-layout__content">
+        <div class="page-content">
+            <div class="mdl-grid">
+                <div class="mdl-cell mdl-cell--12-col">
+                    <div class="mdl-card mdl-shadow--2dp">
+                        <form th:action="@{/homepage}" method="get">
+                            <input type="submit" value="На домашнюю страницу"/>
+                        </form>
+                        <div class="mdl-card__title">
+                            <h2 >Полевая опись</h2>
+                        </div>
+                        <div style="overflow-x:auto;" class="mdl-data-table mdl-js-data-table mdl-data-table--selectable">
+                            <table>
+                                <thead>
+                                <tr>
+                                    <th>Номер в описи</th>
+                                    <th class="mdl-data-table__cell--non-numeric">Предмет</th>
+                                    <th class="mdl-data-table__cell--non-numeric">Описание</th>
+                                    <th class="mdl-data-table__cell--non-numeric">Дата находки</th>
+                                    <th class="mdl-data-table__cell--non-numeric">Размер_X</th>
+                                    <th class="mdl-data-table__cell--non-numeric">Размер_Y</th>
+                                    <th class="mdl-data-table__cell--non-numeric">Размер_Z</th>
+                                    <th class="mdl-data-table__cell--non-numeric">Шифр</th>
+                                    <th class="mdl-data-table__cell--non-numeric">Глубина(см)</th>
+                                    <th class="mdl-data-table__cell--non-numeric">Коорд_Север</th>
+                                    <th class="mdl-data-table__cell--non-numeric">Коорд_Запад</th>
+                                    <th class="mdl-data-table__cell--non-numeric">Материал</th>
+                                    <th class="mdl-data-table__cell--non-numeric">Квадрат</th>
+                                    <th class="mdl-data-table__cell--non-numeric">Слой</th>
+                                    <th class="mdl-data-table__cell--non-numeric">Памятник</th>
+                                    <th class="mdl-data-table__cell--non-numeric">Регион</th>
+                                </tr>
+                                </thead>
+                                <tr th:each="fieldinventory : ${fieldinventories}">
+                                    <td th:text="${fieldinventory.id}"></td>
+                                    <td class="mdl-data-table__cell--non-numeric" th:text="${fieldinventory.title}"></td>
+                                    <td class="mdl-data-table__cell--non-numeric" th:text="${fieldinventory.description}"></td>
+                                    <td class="mdl-data-table__cell--non-numeric" th:text="${fieldinventory.find_date}"></td>
+                                    <td class="mdl-data-table__cell--non-numeric" th:text="${fieldinventory.sizex}"></td>
+                                    <td class="mdl-data-table__cell--non-numeric" th:text="${fieldinventory.sizey}"></td>
+                                    <td class="mdl-data-table__cell--non-numeric" th:text="${fieldinventory.sizez}"></td>
+                                    <td class="mdl-data-table__cell--non-numeric" th:text="${fieldinventory.cipher}"></td>
+                                    <td class="mdl-data-table__cell--non-numeric" th:text="${fieldinventory.depth}"></td>
+                                    <td class="mdl-data-table__cell--non-numeric" th:text="${fieldinventory.coord_north}"></td>
+                                    <td class="mdl-data-table__cell--non-numeric" th:text="${fieldinventory.coord_west}"></td>
+                                    <td class="mdl-data-table__cell--non-numeric" th:text="${fieldinventory.square}"></td>
+                                    <td class="mdl-data-table__cell--non-numeric" th:text="${fieldinventory.material}"></td>
+                                    <td class="mdl-data-table__cell--non-numeric" th:text="${fieldinventory.layer}"></td>
+                                    <td class="mdl-data-table__cell--non-numeric" th:text="${fieldinventory.site_title}"></td>
+                                    <td class="mdl-data-table__cell--non-numeric" th:text="${fieldinventory.region}"></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+</body>
+</html>

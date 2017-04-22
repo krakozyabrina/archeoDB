@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Количество находок по квадратам на заданной глубине</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"/>
+    <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css"/>
+    <script defer="true" src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+    <style>
+        body {
+        background-color: #f1f1f1;
+        }
+        .mdl-card {
+        padding: 20px;
+        width: 100%;
+        }
+        .demo-card-square.mdl-card {
+        width: 450px;
+        height: 450px;
+        }
+        .demo-card-square > .mdl-card__title {
+        background-color: #f1f1f1;
+        }
+    </style>
+</head>
+<body>
+<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+    <main class="mdl-layout__content">
+        <div class="page-content">
+            <div class="mdl-grid">
+                <div class="mdl-cell mdl-cell--12-col">
+                    <div class="mdl-card mdl-shadow--2dp">
+                        <form th:action="@{/homepage}" method="get">
+                            <input type="submit" value="На домашнюю страницу"/>
+                        </form>
+                        <form th:action="@{/count_artifacts_by_squares_on_depth}" th:object="${params}" method="post">
+                            <p>
+                            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                <input id="a_from" class="mdl-textfield__input" type="text" th:field="*{from}"/>
+                                <label class="mdl-textfield__label" for="a_from">Глубина от(см)</label>
+                            </div>
+                            </p>
+                            <p>
+                            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                <input id="a_to" class="mdl-textfield__input" type="text" th:field="*{to}"/>
+                                <label class="mdl-textfield__label" for="a_to">Глубина до(см)</label>
+                            </div>
+                            </p>
+                            <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--primary"
+                                    type="submit">
+                                Пересчитать
+                            </button>
+                        </form>
+                        <div class="mdl-card__title">
+                            <h2 >Количество находок по квадратам на заданной глубине</h2>
+                        </div>
+                        <div class="mdl-data-table mdl-js-data-table mdl-data-table--selectable">
+                            <table>
+                                <thead>
+                                <tr>
+                                    <th class="mdl-data-table__cell--non-numeric">Квадрат</th>
+                                    <th class="mdl-data-table__cell--non-numeric">Количество</th>
+                                </tr>
+                                </thead>
+                                <tr th:each="fieldinventory : ${fieldinventories}">
+                                    <td class="mdl-data-table__cell--non-numeric" th:text="${fieldinventory.square}"></td>
+                                    <td class="mdl-data-table__cell--non-numeric" th:text="${fieldinventory.summa}"></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+</body>
+</html>

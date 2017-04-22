@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Добавление в список сотрудника</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"/>
+    <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css"/>
+    <script defer="true" src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+    <style>
+        body {
+        background-color: #f1f1f1;
+        }
+        .mdl-card {
+        padding: 20px;
+        width: 100%;
+        }
+        .demo-card-square.mdl-card {
+        width: 450px;
+        height: 450px;
+        }
+        .demo-card-square > .mdl-card__title {
+        background-color: #f1f1f1;
+        }
+    </style>
+</head>
+<body>
+<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+    <main class="mdl-layout__content">
+        <div class="page-content">
+
+            <div class="mdl-grid">
+                <div class="mdl-cell mdl-cell--4-col">
+
+                    <div class="mdl-card mdl-shadow--2dp">
+                        <form th:action="@{/homepage}" method="get">
+                            <input type="submit" value="На домашнюю страницу"/>
+                        </form>
+                        <div class="mdl-card__title">
+                            <h2 class="mdl-card__title-text">Сотрудник</h2>
+                        </div>
+                        <div>
+                            <form action="#" th:action="@{/addemployee}" th:object="${employee}" method="post">
+                                <p>
+                                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                    <input id="a_employee" class="mdl-textfield__input" type="text" th:field="*{fio}"/>
+                                    <label class="mdl-textfield__label" for="a_employee">ФИО</label>
+                                </div>
+                                </p>
+                                <p>
+                                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                    <input id="a_employee_p" class="mdl-textfield__input" type="text" th:field="*{phone}"/>
+                                    <label class="mdl-textfield__label" for="a_employee_p">Телефон</label>
+                                </div>
+                                </p>
+                                <p>
+                                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                    <input id="a_employee_pos" class="mdl-textfield__input" type="text" th:field="*{position_id}"/>
+                                    <label class="mdl-textfield__label" for="a_employee_pos">Должность(ид)</label>
+                                </div>
+                                </p>
+                                <p>
+                                    <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--primary"
+                                            type="submit">
+                                        Сохранить
+                                    </button>
+                                    <button class="mdl-button mdl-js-button mdl-button--raised" type="reset">
+                                        Отменить
+                                    </button>
+                                </p>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="mdl-card mdl-shadow--2dp">
+                    <div class="mdl-card__title">
+                        <h2 class="mdl-card__title-text">Все сотрудники в таблице</h2>
+                    </div>
+                    <div>
+                        <table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable">
+                            <thead>
+                            <tr>
+                                <th>Id</th>
+                                <th class="mdl-data-table__cell--non-numeric">Title</th>
+                            </tr>
+                            </thead>
+                            <tr th:each="employee : ${employees}">
+                                <td th:text="${employee.id}"></td>
+                                <td class="mdl-data-table__cell--non-numeric" th:text="${employee.fio}"></td>
+                                <td class="mdl-data-table__cell--non-numeric" th:text="${employee.phone}"></td>
+                                <td class="mdl-data-table__cell--non-numeric" th:text="${employee.position_id}"></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+</body>
+</html>
