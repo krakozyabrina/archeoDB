@@ -1,25 +1,36 @@
 package archeo;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.security.Principal;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 @Controller
 public class ArtifactController {
 
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+
     @Autowired
     private ArtifactDao artifactDao;
 
     @GetMapping("/")
-    public String home() {
-        return "home";
+    public ModelAndView home() {
+
+        ModelAndView mv = new ModelAndView();
+        mv.setViewName("home");
+        mv.addObject("title", "Домашняя страница");
+        return mv;
     }
 
     @GetMapping("/addArtifact")
@@ -36,12 +47,15 @@ public class ArtifactController {
         mv.addObject("positions", artifactDao.findAllPositions());
         mv.addObject("employees", artifactDao.findAllEmployees());
         mv.addObject("sites", artifactDao.findAllSites());
+        mv.addObject("title", "Добавление находок");
 
         return mv;
     }
 
     @PostMapping("/addArtifact")
-    public ModelAndView artifactSubmit(@ModelAttribute Artifact artifact) {
+    public ModelAndView artifactSubmit(@ModelAttribute Artifact artifact,
+                                       BindingResult result,
+                                       SessionStatus status) {
 
         artifactDao.save(artifact);
 
@@ -56,8 +70,10 @@ public class ArtifactController {
         mv.addObject("positions", artifactDao.findAllPositions());
         mv.addObject("employees", artifactDao.findAllEmployees());
         mv.addObject("sites", artifactDao.findAllSites());
+        mv.addObject("title", "Добавление находок");
+        mv.addObject("error", result.hasErrors());
 
-        artifactDao.findAll();
+        //artifactDao.findAll();
 
         return mv;
     }
@@ -87,6 +103,8 @@ public class ArtifactController {
         Material material = new Material();
         mv.setViewName("addmaterial");
         mv.addObject("material", material);
+        mv.addObject("materials", artifactDao.findAllMaterials());
+        mv.addObject("title", "Добавить материал");
 
         return mv;
     }
@@ -100,6 +118,7 @@ public class ArtifactController {
         mv.setViewName("addmaterial");
         mv.addObject("material", material);
         mv.addObject("materials", artifactDao.findAllMaterials());
+        mv.addObject("title", "Добавить материал");
 
         return mv;
     }
@@ -111,6 +130,8 @@ public class ArtifactController {
         Square square = new Square();
         mv.setViewName("addsquare");
         mv.addObject("square", square);
+        mv.addObject("squares", artifactDao.findAllSquares());
+        mv.addObject("title", "Добавить квадрат");
 
         return mv;
     }
@@ -124,17 +145,20 @@ public class ArtifactController {
         mv.setViewName("addsquare");
         mv.addObject("square", square);
         mv.addObject("squares", artifactDao.findAllSquares());
+        mv.addObject("title", "Добавить квадрат");
 
         return mv;
     }
 
     @GetMapping("/addepoch")
-    public ModelAndView addepoch() {
+    public ModelAndView addepoch(Principal principal) {
 
         ModelAndView mv = new ModelAndView();
         Epoch epoch = new Epoch();
         mv.setViewName("addepoch");
+        mv.addObject("title", "Эпоха");
         mv.addObject("epoch", epoch);
+        mv.addObject("epochs", artifactDao.findAllEpochs());
 
         return mv;
     }
@@ -159,6 +183,8 @@ public class ArtifactController {
         Layer layer = new Layer();
         mv.setViewName("addlayer");
         mv.addObject("layer", layer);
+        mv.addObject("layers", artifactDao.findAllLayers());
+        mv.addObject("title", "Добавить слой");
 
         return mv;
     }
@@ -172,6 +198,7 @@ public class ArtifactController {
         mv.setViewName("addlayer");
         mv.addObject("layer", layer);
         mv.addObject("layers", artifactDao.findAllLayers());
+        mv.addObject("title", "Добавить слой");
 
         return mv;
     }
@@ -183,6 +210,8 @@ public class ArtifactController {
         Region region = new Region();
         mv.setViewName("addregion");
         mv.addObject("region", region);
+        mv.addObject("title", "Добавить регион");
+        mv.addObject("regions", artifactDao.findAllRegions());
 
         return mv;
     }
@@ -196,6 +225,7 @@ public class ArtifactController {
         mv.setViewName("addregion");
         mv.addObject("region", region);
         mv.addObject("regions", artifactDao.findAllRegions());
+        mv.addObject("title", "Добавить регион");
 
         return mv;
     }
@@ -207,6 +237,9 @@ public class ArtifactController {
         Position position = new Position();
         mv.setViewName("addposition");
         mv.addObject("position", position);
+        mv.addObject("positions", artifactDao.findAllPositions());
+        mv.addObject("title", "Добавить должность");
+
 
         return mv;
     }
@@ -220,6 +253,7 @@ public class ArtifactController {
         mv.setViewName("addposition");
         mv.addObject("position", position);
         mv.addObject("positions", artifactDao.findAllPositions());
+        mv.addObject("title", "Добавить должность");
 
         return mv;
     }
@@ -231,6 +265,8 @@ public class ArtifactController {
         Employee employee = new Employee();
         mv.setViewName("addemployee");
         mv.addObject("employee", employee);
+        mv.addObject("employees", artifactDao.findAllEmployees());
+        mv.addObject("title","Добавить сотрудника");
 
         return mv;
     }
@@ -244,6 +280,7 @@ public class ArtifactController {
         mv.setViewName("addemployee");
         mv.addObject("employee", employee);
         mv.addObject("employees", artifactDao.findAllEmployees());
+        mv.addObject("title","Добавить сотрудника");
 
         return mv;
     }
@@ -255,6 +292,9 @@ public class ArtifactController {
         Site site = new Site();
         mv.setViewName("addsite");
         mv.addObject("site", site);
+        mv.addObject("sites", artifactDao.findAllSites());
+        mv.addObject("title","Добавить памятник");
+
 
         return mv;
     }
@@ -268,6 +308,7 @@ public class ArtifactController {
         mv.setViewName("addsite");
         mv.addObject("site", site);
         mv.addObject("sites", artifactDao.findAllSites());
+        mv.addObject("title","Добавить памятник");
 
         return mv;
     }
@@ -280,6 +321,7 @@ public class ArtifactController {
         Fieldinventory fieldinventory = new Fieldinventory();
         mv.addObject("fieldinventory", fieldinventory);
         mv.addObject("fieldinventories", artifactDao.fieldInventory());
+        mv.addObject("title", "Полевая опись");
 
         return mv;
     }
@@ -291,6 +333,7 @@ public class ArtifactController {
         mv.setViewName("count_artifacts_by_squares_on_depth");
         mv.addObject("params", new ArtifactsBySquaresOnDepth());
         mv.addObject("fieldinventories", Collections.emptyList());
+        mv.addObject("title", "Количество находок по квадратам на заданной глубине");
 
         return mv;
     }
@@ -302,6 +345,7 @@ public class ArtifactController {
         mv.setViewName("count_artifacts_by_squares_on_depth");
         mv.addObject("params", params);
         mv.addObject("fieldinventories", artifactDao.countArtifactsBySquares(params.getFrom(), params.getTo()));
+        mv.addObject("title", "Количество находок по квадратам на заданной глубине");
 
         return mv;
     }
@@ -312,6 +356,7 @@ public class ArtifactController {
         ModelAndView mv = new ModelAndView();
         mv.setViewName("count_artifacts_by_material");
         mv.addObject("fieldinventories", artifactDao.countArtifactsByMaterial());
+        mv.addObject("title", "Количество находок по материалам");
 
         return mv;
     }
@@ -322,6 +367,7 @@ public class ArtifactController {
         ModelAndView mv = new ModelAndView();
         mv.setViewName("count_artifacts_by_employee");
         mv.addObject("fieldinventories", artifactDao.countArtifactsByEmployee());
+        mv.addObject("title", "Количество находок по сотрудникам");
 
         return mv;
     }
@@ -333,19 +379,182 @@ public class ArtifactController {
         mv.setViewName("find_employee_by_artifact_id");
         mv.addObject("params", new EmployeeByArtifactId());
         mv.addObject("fieldinventories", Collections.emptyList());
+        mv.addObject("title", "Найти сотрудника по номеру находки");
 
         return mv;
     }
 
     @PostMapping("/find_employee_by_artifact_id")
-    public ModelAndView find_employee_by_artifact_id(@ModelAttribute EmployeeByArtifactId params) {
+    public ModelAndView find_employee_by_artifact_id(
+            @ModelAttribute EmployeeByArtifactId params,
+            BindingResult result,
+            SessionStatus status) {
+
+        List<Map<String, Object>> list = artifactDao.findEmployeeByArtifactId(params.getArtifactId());
 
         ModelAndView mv = new ModelAndView();
         mv.setViewName("find_employee_by_artifact_id");
         mv.addObject("params", params);
-        mv.addObject("fieldinventories", artifactDao.findEmployeeByArtifactId(params.getArtifactId()));
+        mv.addObject("error", result.hasErrors());
+        mv.addObject("notfound", list.isEmpty() && !result.hasErrors());
+        mv.addObject("fieldinventories", list);
+        mv.addObject("title", "Найти сотрудника по номеру находки");
 
         return mv;
     }
+
+    @ExceptionHandler
+    public ModelAndView handleException(Exception exception) {
+        logger.info(exception.toString());
+        ModelAndView mv = new ModelAndView();
+        mv.setViewName("error");
+        mv.addObject("error", exception.getMessage());
+        return mv;
+    }
+
+    @GetMapping("/count_artifacts_by_squares")
+    public ModelAndView query_artifacts_by_squares() {
+
+        ModelAndView mv = new ModelAndView();
+        mv.setViewName("count_artifacts_by_squares");
+        mv.addObject("fieldinventories", artifactDao.countArtifactsBySquares());
+        mv.addObject("title", "Общее количество находок по квадратам");
+
+        return mv;
+    }
+
+    @GetMapping("/find_my_artifacts")
+    public ModelAndView find_my_artifacts() {
+
+        ModelAndView mv = new ModelAndView();
+        mv.setViewName("find_my_artifacts");
+        mv.addObject("params", new MyFieldInventory());
+        mv.addObject("fieldinventories", Collections.emptyList());
+        mv.addObject("title", "Мои находки");
+
+        return mv;
+    }
+
+    @PostMapping("/find_my_artifacts")
+    public ModelAndView find_my_artifacts(
+            @ModelAttribute MyFieldInventory params,
+            BindingResult result,
+            SessionStatus status) {
+
+        List<Map<String, Object>> list = artifactDao.findMyArtifacts(params.getName());
+
+        ModelAndView mv = new ModelAndView();
+        mv.setViewName("find_my_artifacts");
+        mv.addObject("params", params);
+        mv.addObject("error", result.hasErrors());
+        mv.addObject("notfound", list.isEmpty() && !result.hasErrors());
+        mv.addObject("fieldinventories", list);
+        mv.addObject("title", "Мои находки");
+
+        return mv;
+    }
+
+    @GetMapping("/find_artifacts_by_days")
+    public ModelAndView find_artifacts_by_days() {
+
+        ModelAndView mv = new ModelAndView();
+        mv.setViewName("find_artifacts_by_days");
+        mv.addObject("params", new ArtifactsByDays());
+        mv.addObject("fieldinventories", Collections.emptyList());
+        mv.addObject("title", "Опись находок по заданным дням");
+
+        return mv;
+    }
+
+    @PostMapping("/find_artifacts_by_days")
+    public ModelAndView find_artifacts_by_days(
+            @ModelAttribute ArtifactsByDays params,
+            BindingResult result,
+            SessionStatus status) {
+
+        List<Map<String, Object>> list = artifactDao.fieldInventoryByPeriod(params.getFrom(),params.getTill());
+
+        ModelAndView mv = new ModelAndView();
+        mv.addObject("params", params);
+        mv.addObject("error", result.hasErrors());
+        mv.addObject("notfound", list.isEmpty() && !result.hasErrors());
+        mv.addObject("fieldinventories", list);
+        mv.addObject("title", "Опись находок по заданным дням");
+
+        return mv;
+    }
+
+    @GetMapping("/field_inventory_by_squares_and_depth")
+    public ModelAndView field_inventory_by_squares_and_depth() {
+
+        ModelAndView mv = new ModelAndView();
+        mv.setViewName("field_inventory_by_squares_and_depth");
+        mv.addObject("params", new ArtifactsBySquaresAndDepth());
+        mv.addObject("fieldinventories", Collections.emptyList());
+        mv.addObject("title", "Опись предметов по заданным квадратам и глубине");
+
+        return mv;
+    }
+
+    @PostMapping("/field_inventory_by_squares_and_depth")
+    public ModelAndView field_inventory_by_squares_and_depth(
+            @ModelAttribute ArtifactsBySquaresAndDepth params,
+            BindingResult result,
+            SessionStatus status) {
+
+        List<Map<String, Object>> list = artifactDao.fieldInventoryBySquaresAndDepth(params.getSquares(),params.getDepth_from(), params.getDepth_till());
+
+        ModelAndView mv = new ModelAndView();
+        mv.addObject("params", params);
+        mv.addObject("error", result.hasErrors());
+        mv.addObject("notfound", list.isEmpty() && !result.hasErrors());
+        mv.addObject("fieldinventories", list);
+        mv.addObject("title", "Опись предметов по заданным квадратам и глубине");
+
+        return mv;
+    }
+
+    @GetMapping("/all_sites_description")
+    public ModelAndView all_sites_description() {
+
+        ModelAndView mv = new ModelAndView();
+        mv.setViewName("all_sites_description");
+        mv.addObject("fieldinventories", artifactDao.allSitesDescription());
+        mv.addObject("title", "Полное описание памятников");
+
+        return mv;
+    }
+
+    @GetMapping("/size_of_artifacts_by_square_and_depth")
+    public ModelAndView size_of_artifacts_by_square_and_depth() {
+
+        ModelAndView mv = new ModelAndView();
+        mv.setViewName("size_of_artifacts_by_square_and_depth");
+        mv.addObject("params", new ArtifactsBySquaresAndDepth());
+        mv.addObject("fieldinventories", Collections.emptyList());
+        mv.addObject("title", "Размеры фрагментов по квадрату и глубине");
+
+        return mv;
+    }
+
+    @PostMapping("/size_of_artifacts_by_square_and_depth")
+    public ModelAndView size_of_artifacts_by_square_and_depth(
+            @ModelAttribute ArtifactsBySquaresAndDepth params,
+            BindingResult result,
+            SessionStatus status) {
+
+        List<Map<String, Object>> list = artifactDao.sizeOfArtifactsBySquareAndDepth(params.getSquares(),params.getDepth_from(), params.getDepth_till());
+
+        ModelAndView mv = new ModelAndView();
+        mv.addObject("params", params);
+        mv.addObject("error", result.hasErrors());
+        mv.addObject("notfound", list.isEmpty() && !result.hasErrors());
+        mv.addObject("fieldinventories", list);
+        mv.addObject("title", "Размеры фрагментов по квадрату и глубине");
+
+        return mv;
+    }
+
+
 
 }

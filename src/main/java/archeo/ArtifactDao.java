@@ -1,13 +1,14 @@
 package archeo;
 
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by arybasova on 16.04.17.
  */
 public interface ArtifactDao {
 
-    void findAll();
     void save(Artifact artifact);
     List<Material> findAllMaterials();
     void saveMaterial(Material material);
@@ -25,9 +26,16 @@ public interface ArtifactDao {
     List<Employee> findAllEmployees();
     void saveSite(Site site);
     List<Site> findAllSites();
-    List fieldInventory();
-    List countArtifactsBySquares(Float from, Float to);
-    List countArtifactsByMaterial();
-    List countArtifactsByEmployee();
-    List findEmployeeByArtifactId(Long artifactId);
+    List<Fieldinventory> fieldInventory();
+    List<Map<String, Object>> countArtifactsBySquares(Float from, Float to);
+    List<Map<String, Object>> countArtifactsByMaterial();
+    List<Map<String, Object>> countArtifactsByEmployee();
+    List<Map<String, Object>> findEmployeeByArtifactId(Long artifactId);
+    List<Map<String, Object>> countArtifactsBySquares();
+    List<Map<String, Object>> findMyArtifacts(String name);
+    List<Map<String, Object>> fieldInventoryByPeriod(Date from, Date till);
+    List<Map<String, Object>> fieldInventoryBySquaresAndDepth(List<String> squares, Float depth_from, Float depth_till);
+    List<Map<String, Object>> allSitesDescription();
+    List<Map<String, Object>> sizeOfArtifactsBySquareAndDepth(List<String> squares, Float depth_from, Float depth_till);
+
 }

@@ -6,9 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Created by arybasova on 14.04.17.
@@ -22,16 +23,6 @@ public class ArtifactDaoImpl implements ArtifactDao {
     private JdbcTemplate jdbcTemplate;
 
     @Override
-    public void findAll() {
-
-        jdbcTemplate.query("select * from artifact", (resultSet, rowNum) -> {
-            Artifact a = new Artifact();
-            a.setId(resultSet.getLong("id"));
-            a.setTitle(resultSet.getString("title"));
-            return a;
-        }).forEach(artifact -> log.info(artifact.toString()));
-    }
-
     public void save(Artifact artifact) {
 
         jdbcTemplate.update("INSERT INTO " +
@@ -44,6 +35,7 @@ public class ArtifactDaoImpl implements ArtifactDao {
                 artifact.getEmployee_id(), artifact.getSite_id());
     }
 
+    @Override
     public List<Material> findAllMaterials(){
         return jdbcTemplate.query("select * from material", (resultSet, rowNum) -> {
             Material m = new Material();
@@ -53,10 +45,12 @@ public class ArtifactDaoImpl implements ArtifactDao {
         });
     }
 
+    @Override
     public void saveMaterial(Material material) {
         jdbcTemplate.update("INSERT INTO material(material) VALUES (?)", material.getMaterial());
     }
 
+    @Override
     public List<Square> findAllSquares(){
         return jdbcTemplate.query("select * from square", (resultSet, rowNum) -> {
             Square s = new Square();
@@ -66,10 +60,12 @@ public class ArtifactDaoImpl implements ArtifactDao {
         });
     }
 
+    @Override
     public void saveSquare(Square square) {
         jdbcTemplate.update("INSERT INTO square(square) VALUES (?)", square.getSquare());
     }
 
+    @Override
     public List<Epoch> findAllEpochs(){
         return jdbcTemplate.query("select * from epoch", (resultSet, rowNum) -> {
             Epoch e = new Epoch();
@@ -79,14 +75,17 @@ public class ArtifactDaoImpl implements ArtifactDao {
         });
     }
 
+    @Override
     public void saveEpoch(Epoch epoch) {
         jdbcTemplate.update("INSERT INTO epoch(epoch) VALUES (?)", epoch.getEpoch());
     }
 
+    @Override
     public void saveLayer(Layer layer) {
         jdbcTemplate.update("INSERT INTO layer(layer) VALUES (?)", layer.getLayer());
     }
 
+    @Override
     public List<Layer> findAllLayers(){
         return jdbcTemplate.query("select * from layer", (resultSet, rowNum) -> {
             Layer l = new Layer();
@@ -96,10 +95,12 @@ public class ArtifactDaoImpl implements ArtifactDao {
         });
     }
 
+    @Override
     public void saveRegion(Region region) {
         jdbcTemplate.update("INSERT INTO region(region) VALUES (?)", region.getRegion());
     }
 
+    @Override
     public List<Region> findAllRegions(){
         return jdbcTemplate.query("select * from region", (resultSet, rowNum) -> {
             Region r = new Region();
@@ -109,10 +110,12 @@ public class ArtifactDaoImpl implements ArtifactDao {
         });
     }
 
+    @Override
     public void savePosition(Position position) {
         jdbcTemplate.update("INSERT INTO position(position) VALUES (?)", position.getPosition());
     }
 
+    @Override
     public List<Position> findAllPositions(){
         return jdbcTemplate.query("select * from position", (resultSet, rowNum) -> {
             Position p = new Position();
@@ -122,10 +125,12 @@ public class ArtifactDaoImpl implements ArtifactDao {
         });
     }
 
+    @Override
     public void saveEmployee(Employee employee) {
         jdbcTemplate.update("INSERT INTO employee(fio, phone, position_id) VALUES (?,?,?)", employee.getFio(), employee.getPhone(), employee.getPosition_id());
     }
 
+    @Override
     public List<Employee> findAllEmployees(){
         return jdbcTemplate.query("select * from employee", (resultSet, rowNum) -> {
             Employee e = new Employee();
@@ -136,10 +141,13 @@ public class ArtifactDaoImpl implements ArtifactDao {
             return e;
         });
     }
+
+    @Override
     public void saveSite(Site site) {
         jdbcTemplate.update("INSERT INTO site(site_title, site_comments, region_id, epoch_id) VALUES (?,?,?,?)", site.getSite_title(), site.getSite_comments(), site.getRegion_id(), site.getEpoch_id());
     }
 
+    @Override
     public List<Site> findAllSites(){
         return jdbcTemplate.query("select * from site", (resultSet, rowNum) -> {
             Site s = new Site();
@@ -152,7 +160,8 @@ public class ArtifactDaoImpl implements ArtifactDao {
         });
     }
 
-    public List fieldInventory() {
+    @Override
+    public List<Fieldinventory> fieldInventory() {
         return jdbcTemplate.query("SELECT artifact.id, " +
                 "artifact.title, " +
                 "artifact.description, " +
@@ -193,23 +202,154 @@ public class ArtifactDaoImpl implements ArtifactDao {
     }
 
     @Override
-    public List countArtifactsBySquares(Float from, Float to) {
+    public List<Map<String, Object>> countArtifactsBySquares(Float from, Float to) {
         return jdbcTemplate.queryForList("SELECT square.square AS square, Count(artifact.id) AS summa FROM square INNER JOIN artifact ON square.id = artifact.square_id WHERE ((artifact.depth) Between ? And ?) GROUP BY square.square", from, to);
     }
 
     @Override
-    public List countArtifactsByMaterial() {
+    public List<Map<String, Object>> countArtifactsByMaterial() {
         return jdbcTemplate.queryForList("SELECT material.material AS material, COUNT(artifact.id) AS summa FROM material INNER JOIN artifact ON material.id = artifact.material_id GROUP BY material.material ORDER BY material.material");
     }
 
     @Override
-    public List countArtifactsByEmployee() {
+    public List<Map<String, Object>> countArtifactsByEmployee() {
         return jdbcTemplate.queryForList("SELECT employee.fio AS fio, Count(artifact.id) AS summa FROM employee INNER JOIN artifact ON employee.id = artifact.employee_id GROUP BY employee.fio ORDER BY employee.fio");
     }
 
     @Override
-    public List findEmployeeByArtifactId(Long artifactId) {
+    public List<Map<String, Object>> findEmployeeByArtifactId(Long artifactId) {
         return jdbcTemplate.queryForList("SELECT employee.fio, employee.phone, position.position FROM position INNER JOIN (employee INNER JOIN artifact ON employee.id = artifact.employee_id) ON position.id = employee.position_id WHERE artifact.id = ?", artifactId);
+    }
+
+    @Override
+    public List<Map<String, Object>> countArtifactsBySquares() {
+        return jdbcTemplate.queryForList("SELECT square.square AS square, COUNT(artifact.id) AS summa FROM square INNER JOIN artifact ON square.id = artifact.square_id GROUP BY square.square");
+    }
+
+    @Override
+    public List<Map<String, Object>> findMyArtifacts(String name) {
+        return jdbcTemplate.queryForList("SELECT artifact.id, artifact.title, artifact.description, artifact.find_date, " +
+                "artifact.sizex, " +
+                "artifact.sizey, " +
+                "artifact.sizez, " +
+                "layer.layer, " +
+                "artifact.depth, " +
+                "artifact.coord_north, " +
+                "artifact.coord_west, " +
+                "square.square, " +
+                "material.material " +
+                "FROM square INNER JOIN " +
+                "(material INNER JOIN " +
+                "(layer INNER JOIN " +
+                "((position INNER JOIN employee " +
+                "ON position.id = employee.position_id) " +
+                "INNER JOIN artifact " +
+                "ON employee.id = artifact.employee_id) " +
+                "ON layer.id = artifact.layer_id) " +
+                "ON material.id = artifact.material_id) " +
+                "ON square.id = artifact.square_id " +
+                "WHERE (employee.fio = ?)", name);
+    }
+
+    @Override
+    public List<Map<String, Object>> fieldInventoryByPeriod(Date from, Date till) {
+        return jdbcTemplate.queryForList("SELECT " +
+                "artifact.id, " +
+                "artifact.title, " +
+                "artifact.description, " +
+                "artifact.find_date, " +
+                "artifact.sizex, " +
+                "artifact.sizey, " +
+                "artifact.sizez, " +
+                "artifact.cipher, " +
+                "artifact.depth, " +
+                "artifact.coord_north, " +
+                "artifact.coord_west, " +
+                "square.square, " +
+                "material.material, " +
+                "layer.layer, " +
+                "site.site_title, " +
+                "region.region " +
+                "FROM layer INNER JOIN " +
+                "(region INNER JOIN " +
+                "(site INNER JOIN " +
+                "(material INNER JOIN " +
+                "(square INNER JOIN artifact " +
+                "ON square.id = artifact.square_id) " +
+                "ON material.id = artifact.material_id) " +
+                "ON site.id = artifact.site_id) " +
+                "ON region.id = site.region_id) " +
+                "ON layer.id = artifact.layer_id " +
+                "WHERE artifact.find_date between ? and ?" +
+                "ORDER BY artifact.id", from, till);
+    }
+
+    @Override
+    public List<Map<String, Object>> fieldInventoryBySquaresAndDepth(List<String> squares, Float depth_from, Float depth_till) {
+
+        String listParam = squares.stream()
+                .map(str -> "'" + str + "'")
+                .collect(Collectors.joining(", "));
+
+        return jdbcTemplate.queryForList("SELECT  " +
+                "artifact.id, " +
+                "artifact.title, " +
+                "artifact.description, " +
+                "artifact.find_date, " +
+                "artifact.sizex, " +
+                "artifact.sizey, " +
+                "artifact.sizez, " +
+                "artifact.cipher, " +
+                "artifact.depth, " +
+                "artifact.coord_north, " +
+                "artifact.coord_west, " +
+                "square.square, " +
+                "material.material, " +
+                "layer.layer, " +
+                "site.site_title, " +
+                "region.region " +
+                "FROM layer INNER JOIN " +
+                "(region INNER JOIN " +
+                "(site INNER JOIN " +
+                "(material INNER JOIN " +
+                "(square INNER JOIN artifact " +
+                "ON square.id = artifact.square_id) " +
+                "ON material.id = artifact.material_id) " +
+                "ON site.id = artifact.site_id) " +
+                "ON region.id = site.region_id) " +
+                "ON layer.id = artifact.layer_id " +
+                "WHERE (square.square in ( " + listParam + " )) " +
+                "and (artifact.depth between ? and ?) " +
+                "ORDER BY artifact.id", depth_from, depth_till);
+    }
+
+    @Override
+    public List<Map<String, Object>> allSitesDescription() {
+        return jdbcTemplate.queryForList("SELECT site.site_title, " +
+                "region.region, " +
+                "epoch.epoch, " +
+                "site.site_comments " +
+                "FROM epoch INNER JOIN " +
+                "(region INNER JOIN site " +
+                "ON region.id = site.region_id) " +
+                "ON epoch.id = site.epoch_id");
+    }
+
+    @Override
+    public List<Map<String, Object>> sizeOfArtifactsBySquareAndDepth(List<String> squares, Float depth_from, Float depth_till) {
+        String listParam = squares.stream()
+                .map(str -> "'" + str + "'")
+                .collect(Collectors.joining(", "));
+        return jdbcTemplate.queryForList("SELECT artifact.id, " +
+                "artifact.sizex, " +
+                "artifact.sizey, " +
+                "artifact.sizez, " +
+                "square.square, " +
+                "artifact.depth " +
+                "FROM square INNER JOIN artifact " +
+                "ON square.id = artifact.square_id " +
+                "WHERE square.square in ( " + listParam + " )" +
+                "and artifact.depth between ? and ?", depth_from, depth_till);
     }
 
 }

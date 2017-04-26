@@ -12,9 +12,37 @@
 
             <div class="demo-cards mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--12-col">
                 <div class="mdl-card__title mdl-color--teal-300">
-                    <h2 class="mdl-card__title-text">Полевая опись</h2>
+                    <h2 class="mdl-card__title-text">Опись предметов по заданным квадратам и глубине</h2>
+                    <div class="mdl-layout-spacer"></div>
+                    <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon" id="show-dialog">
+                        <i class="material-icons">filter_list</i>
+                    </button>
+                </div>
+                <div class="mdl-color-text--grey-600">
+
+                    <div class="params" th:unless="${error}">
+                        <div>
+                            <b>Квадраты: </b><span th:text="${{params.squares}}"></span>
+                        </div>
+                        <div>
+                            <b>Глубина от: </b><span th:text="${{params.depth_from}}"></span>
+                        </div>
+                        <div>
+                            <b>Глубина до: </b><span th:text="${{params.depth_till}}"></span>
+                        </div>
+                    </div>
+
+                    <div class="params params-error" th:if="${error}">
+                        Произошла ошибка
+                    </div>
+
+                    <div class="params" th:if="${notfound}">
+                        Ничего не найдено
+                    </div>
+
                 </div>
                 <div class="mdl-color-text--grey-600 big-table">
+
                     <table class="mdl-data-table mdl-js-data-table">
                         <thead>
                         <tr>
@@ -40,7 +68,7 @@
                             <td th:text="${fieldinventory.id}"></td>
                             <td class="mdl-data-table__cell--non-numeric" th:text="${fieldinventory.title}"></td>
                             <td class="mdl-data-table__cell--non-numeric" th:text="${fieldinventory.description}"></td>
-                            <td class="mdl-data-table__cell--non-numeric" th:text="${fieldinventory.find_date}"></td>
+                            <td class="mdl-data-table__cell--non-numeric" th:text="${#dates.format(fieldinventory.find_date, 'dd.MM.yyyy')}"></td>
                             <td class="mdl-data-table__cell--non-numeric" th:text="${fieldinventory.sizex}"></td>
                             <td class="mdl-data-table__cell--non-numeric" th:text="${fieldinventory.sizey}"></td>
                             <td class="mdl-data-table__cell--non-numeric" th:text="${fieldinventory.sizez}"></td>
@@ -56,10 +84,61 @@
                         </tr>
                     </table>
                 </div>
-
             </div>
         </div>
     </main>
 </div>
+
+<dialog class="mdl-dialog">
+    <h4 class="mdl-dialog__title">Параметры</h4>
+    <div class="mdl-dialog__content">
+        <p>
+            Укажите параметры
+        </p>
+        <div>
+            <form id="search_form" th:action="@{/field_inventory_by_squares_and_depth}" th:object="${params}" method="post">
+                <p>
+                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                    <input id="a_squares" class="mdl-textfield__input" type="text" th:field="*{squares}"/>
+                    <label class="mdl-textfield__label" for="a_squares">Квадрат(ы)</label>
+                </div>
+                </p>
+                <p>
+                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                    <input id="a_depth_from" class="mdl-textfield__input" type="text" th:field="*{depth_from}"/>
+                    <label class="mdl-textfield__label" for="a_depth_from">Глубина от</label>
+                </div>
+                </p>
+                <p>
+                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                    <input id="a_depth_till" class="mdl-textfield__input" type="text" th:field="*{depth_till}"/>
+                    <label class="mdl-textfield__label" for="a_depth_till">Глубина до</label>
+                </div>
+                </p>
+            </form>
+        </div>
+    </div>
+    <div class="mdl-dialog__actions">
+        <button type="button" class="mdl-button ok">Найти</button>
+        <button type="button" class="mdl-button close">Отменить</button>
+    </div>
+</dialog>
+<script>
+    var dialog = document.querySelector('dialog');
+    var showDialogButton = document.querySelector('#show-dialog');
+    if (! dialog.showModal) {
+      dialogPolyfill.registerDialog(dialog);
+    }
+    showDialogButton.addEventListener('click', function() {
+      dialog.showModal();
+    });
+    dialog.querySelector('.close').addEventListener('click', function() {
+      dialog.close();
+    });
+    dialog.querySelector('.ok').addEventListener('click', function() {
+      document.getElementById('search_form').submit();
+    });
+</script>
+
 </body>
 </html>

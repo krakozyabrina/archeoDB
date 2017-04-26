@@ -1,0 +1,30 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head th:replace="fragments/base :: common_header"></head>
+<body>
+<div class="demo-layout mdl-layout mdl-js-layout mdl-layout--fixed-drawer mdl-layout--fixed-header">
+
+    <div th:replace="fragments/header :: header"></div>
+    <div th:replace="fragments/nav :: nav"></div>
+
+    <main class="mdl-layout__content mdl-color--grey-100">
+        <div class="demo-content">
+
+            <h1 style="color:red">Что-то пошло не так...</h1>
+            <p>
+            <div th:text="${error}"></div>
+            </p>
+
+            <p>
+            <button onclick="window.location = window.location;">Вернуться</button>
+            </p>
+
+        </div>
+    </main>
+</div>
+
+<div th:replace="fragments/footer :: footer"></div>
+
+</body>
+</html>

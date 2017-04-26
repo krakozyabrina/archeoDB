@@ -10,27 +10,25 @@
     <main class="mdl-layout__content mdl-color--grey-100">
         <div class="mdl-grid demo-content">
 
-           <div class="demo-cards mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--12-col">
+            <div class="demo-cards mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--6-col">
                 <div class="mdl-card__title mdl-color--teal-300">
-                    <h2 class="mdl-card__title-text">Количество находок по сотрудникам</h2>
+                    <h2 class="mdl-card__title-text">Общее количество находок по квадратам</h2>
                 </div>
                 <div class="mdl-color-text--grey-600">
                     <table class="mdl-data-table mdl-js-data-table">
                         <thead>
                         <tr>
-                            <th>ФИО</th>
-                            <th class="mdl-data-table__cell--non-numeric">Количество находок</th>
+                            <th class="mdl-data-table__cell--non-numeric">Квадрат</th>
+                            <th class="mdl-data-table__cell--non-numeric">Количество</th>
                         </tr>
                         </thead>
                         <tr th:each="fieldinventory : ${fieldinventories}">
-                            <td th:text="${fieldinventory.fio}"></td>
+                            <td class="mdl-data-table__cell--non-numeric" th:text="${fieldinventory.square}"></td>
                             <td class="mdl-data-table__cell--non-numeric" th:text="${fieldinventory.summa}"></td>
                         </tr>
                     </table>
                 </div>
-
             </div>
-
         </div>
     </main>
 </div>

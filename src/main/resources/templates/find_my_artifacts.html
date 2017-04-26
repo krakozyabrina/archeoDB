@@ -10,9 +10,38 @@
     <main class="mdl-layout__content mdl-color--grey-100">
         <div class="mdl-grid demo-content">
 
-            <div class="demo-cards mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--12-col">
+            <div class="demo-cards mdl-cell mdl-cell--6-col mdl-grid mdl-grid--no-spacing">
+
+                <div class="demo-cards mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--12-col">
+                    <div class="mdl-card__title mdl-color--teal-300">
+                        <h2 class="mdl-card__title-text">Параметры</h2>
+                    </div>
+                    <div class="mdl-card__supporting-text mdl-color-text--grey-600">
+                        <div th:if="${error}">
+                            Error
+                        </div>
+                        <div th:if="${notfound}">
+                            Not Found
+                        </div>
+                        <form th:action="@{/find_my_artifacts}" th:object="${params}" method="post">
+                            <p>
+                            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                <input id="a_name" class="mdl-textfield__input" type="text" th:field="*{name}"/>
+                                <label class="mdl-textfield__label" for="a_name">Моё полное имя(ФИО)</label>
+                            </div>
+                            </p>
+                            <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--primary"
+                                    type="submit">
+                                Найти
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="demo-cards mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--6-col">
                 <div class="mdl-card__title mdl-color--teal-300">
-                    <h2 class="mdl-card__title-text">Полевая опись</h2>
+                    <h2 class="mdl-card__title-text">Опись моих находок</h2>
                 </div>
                 <div class="mdl-color-text--grey-600 big-table">
                     <table class="mdl-data-table mdl-js-data-table">
@@ -25,15 +54,12 @@
                             <th class="mdl-data-table__cell--non-numeric">Размер_X</th>
                             <th class="mdl-data-table__cell--non-numeric">Размер_Y</th>
                             <th class="mdl-data-table__cell--non-numeric">Размер_Z</th>
-                            <th class="mdl-data-table__cell--non-numeric">Шифр</th>
+                            <th class="mdl-data-table__cell--non-numeric">Слой</th>
                             <th class="mdl-data-table__cell--non-numeric">Глубина(см)</th>
                             <th class="mdl-data-table__cell--non-numeric">Коорд_Север</th>
                             <th class="mdl-data-table__cell--non-numeric">Коорд_Запад</th>
                             <th class="mdl-data-table__cell--non-numeric">Квадрат</th>
                             <th class="mdl-data-table__cell--non-numeric">Материал</th>
-                            <th class="mdl-data-table__cell--non-numeric">Слой</th>
-                            <th class="mdl-data-table__cell--non-numeric">Памятник</th>
-                            <th class="mdl-data-table__cell--non-numeric">Регион</th>
                         </tr>
                         </thead>
                         <tr th:each="fieldinventory : ${fieldinventories}">
@@ -44,19 +70,15 @@
                             <td class="mdl-data-table__cell--non-numeric" th:text="${fieldinventory.sizex}"></td>
                             <td class="mdl-data-table__cell--non-numeric" th:text="${fieldinventory.sizey}"></td>
                             <td class="mdl-data-table__cell--non-numeric" th:text="${fieldinventory.sizez}"></td>
-                            <td class="mdl-data-table__cell--non-numeric" th:text="${fieldinventory.cipher}"></td>
+                            <td class="mdl-data-table__cell--non-numeric" th:text="${fieldinventory.layer}"></td>
                             <td class="mdl-data-table__cell--non-numeric" th:text="${fieldinventory.depth}"></td>
                             <td class="mdl-data-table__cell--non-numeric" th:text="${fieldinventory.coord_north}"></td>
                             <td class="mdl-data-table__cell--non-numeric" th:text="${fieldinventory.coord_west}"></td>
                             <td class="mdl-data-table__cell--non-numeric" th:text="${fieldinventory.square}"></td>
                             <td class="mdl-data-table__cell--non-numeric" th:text="${fieldinventory.material}"></td>
-                            <td class="mdl-data-table__cell--non-numeric" th:text="${fieldinventory.layer}"></td>
-                            <td class="mdl-data-table__cell--non-numeric" th:text="${fieldinventory.site_title}"></td>
-                            <td class="mdl-data-table__cell--non-numeric" th:text="${fieldinventory.region}"></td>
                         </tr>
                     </table>
                 </div>
-
             </div>
         </div>
     </main>
