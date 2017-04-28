@@ -10,6 +10,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.document.AbstractXlsView;
 
 import java.security.Principal;
 import java.util.Collections;
@@ -17,12 +18,27 @@ import java.util.List;
 import java.util.Map;
 
 @Controller
+@SessionAttributes(types = {ArtifactsBySquaresAndDepth.class,
+        ArtifactsBySquaresOnDepth.class,
+        ArtifactsByDays.class,
+        EmployeeByArtifactId.class,
+        MyFieldInventory.class,
+        SizeOfArtifactsBySquareAndDepth.class})
 public class ArtifactController {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     private ArtifactDao artifactDao;
+
+    @ExceptionHandler
+    public ModelAndView handleException(Exception exception) {
+        logger.info(exception.toString());
+        ModelAndView mv = new ModelAndView();
+        mv.setViewName("error");
+        mv.addObject("error", "");
+        return mv;
+    }
 
     @GetMapping("/")
     public ModelAndView home() {
@@ -319,11 +335,16 @@ public class ArtifactController {
         ModelAndView mv = new ModelAndView();
         mv.setViewName("fieldinventory");
         Fieldinventory fieldinventory = new Fieldinventory();
-        mv.addObject("fieldinventory", fieldinventory);
         mv.addObject("fieldinventories", artifactDao.fieldInventory());
         mv.addObject("title", "Полевая опись");
 
         return mv;
+    }
+
+    @GetMapping("/fieldinventory_export")
+    public ModelAndView fieldinventory_export() {
+        List<Fieldinventory> fieldinventories = artifactDao.fieldInventory();
+        return new ModelAndView(new FieldInventoryAEL(fieldinventories));
     }
 
     @GetMapping("/count_artifacts_by_squares_on_depth")
@@ -331,7 +352,7 @@ public class ArtifactController {
 
         ModelAndView mv = new ModelAndView();
         mv.setViewName("count_artifacts_by_squares_on_depth");
-        mv.addObject("params", new ArtifactsBySquaresOnDepth());
+        mv.addObject("artifactsBySquaresOnDepth", new ArtifactsBySquaresOnDepth());
         mv.addObject("fieldinventories", Collections.emptyList());
         mv.addObject("title", "Количество находок по квадратам на заданной глубине");
 
@@ -339,15 +360,21 @@ public class ArtifactController {
     }
 
     @PostMapping("/count_artifacts_by_squares_on_depth")
-    public ModelAndView count_artifacts_by_squares_on_depth(@ModelAttribute ArtifactsBySquaresOnDepth params) {
+    public ModelAndView count_artifacts_by_squares_on_depth(@ModelAttribute("artifactsBySquaresOnDepth") ArtifactsBySquaresOnDepth artifactsBySquaresOnDepth) {
 
         ModelAndView mv = new ModelAndView();
         mv.setViewName("count_artifacts_by_squares_on_depth");
-        mv.addObject("params", params);
-        mv.addObject("fieldinventories", artifactDao.countArtifactsBySquares(params.getFrom(), params.getTo()));
+        mv.addObject("artifactsBySquaresOnDepth", artifactsBySquaresOnDepth);
+        mv.addObject("fieldinventories", artifactDao.countArtifactsBySquares(artifactsBySquaresOnDepth.getFrom(), artifactsBySquaresOnDepth.getTo()));
         mv.addObject("title", "Количество находок по квадратам на заданной глубине");
 
         return mv;
+    }
+
+    @GetMapping("/count_artifacts_by_squares_on_depth_export")
+    public ModelAndView count_artifacts_by_squares_on_depth_export(@ModelAttribute("artifactsBySquaresOnDepth") ArtifactsBySquaresOnDepth artifactsBySquaresOnDepth) {
+        List<Map<String, Object>> list = artifactDao.countArtifactsBySquares(artifactsBySquaresOnDepth.getFrom(),artifactsBySquaresOnDepth.getTo());
+        return new ModelAndView(new CountArtifactsBySquaresOnDepthAEV(list));
     }
 
     @GetMapping("/count_artifacts_by_material")
@@ -361,6 +388,12 @@ public class ArtifactController {
         return mv;
     }
 
+    @GetMapping("/count_artifacts_by_material_export")
+    public ModelAndView count_artifacts_by_material_export() {
+        List<Map<String,Object>> list = artifactDao.countArtifactsByMaterial();
+        return new ModelAndView(new ArtifactsByMaterialAEV(list));
+    }
+
     @GetMapping("/count_artifacts_by_employee")
     public ModelAndView count_artifacts_by_employee() {
 
@@ -372,12 +405,18 @@ public class ArtifactController {
         return mv;
     }
 
+    @GetMapping("/count_artifacts_by_employee_export")
+    public ModelAndView count_artifacts_by_employee_export() {
+        List<Map<String,Object>> list = artifactDao.countArtifactsByEmployee();
+        return new ModelAndView(new ArtifactsByEmployeeAEV(list));
+    }
+
     @GetMapping("/find_employee_by_artifact_id")
     public ModelAndView find_employee_by_artifact_id() {
 
         ModelAndView mv = new ModelAndView();
         mv.setViewName("find_employee_by_artifact_id");
-        mv.addObject("params", new EmployeeByArtifactId());
+        mv.addObject("employeeByArtifactId", new EmployeeByArtifactId());
         mv.addObject("fieldinventories", Collections.emptyList());
         mv.addObject("title", "Найти сотрудника по номеру находки");
 
@@ -386,29 +425,20 @@ public class ArtifactController {
 
     @PostMapping("/find_employee_by_artifact_id")
     public ModelAndView find_employee_by_artifact_id(
-            @ModelAttribute EmployeeByArtifactId params,
+            @ModelAttribute EmployeeByArtifactId employeeByArtifactId,
             BindingResult result,
             SessionStatus status) {
 
-        List<Map<String, Object>> list = artifactDao.findEmployeeByArtifactId(params.getArtifactId());
+        List<Map<String, Object>> list = artifactDao.findEmployeeByArtifactId(employeeByArtifactId.getArtifactId());
 
         ModelAndView mv = new ModelAndView();
         mv.setViewName("find_employee_by_artifact_id");
-        mv.addObject("params", params);
+        mv.addObject("employeeByArtifactId", employeeByArtifactId);
         mv.addObject("error", result.hasErrors());
         mv.addObject("notfound", list.isEmpty() && !result.hasErrors());
         mv.addObject("fieldinventories", list);
         mv.addObject("title", "Найти сотрудника по номеру находки");
 
-        return mv;
-    }
-
-    @ExceptionHandler
-    public ModelAndView handleException(Exception exception) {
-        logger.info(exception.toString());
-        ModelAndView mv = new ModelAndView();
-        mv.setViewName("error");
-        mv.addObject("error", exception.getMessage());
         return mv;
     }
 
@@ -423,12 +453,18 @@ public class ArtifactController {
         return mv;
     }
 
+    @GetMapping("/count_artifacts_by_squares_export")
+    public ModelAndView count_artifacts_by_squares_export() {
+        List<Map<String,Object>> list = artifactDao.countArtifactsBySquares();
+        return new ModelAndView(new ArtifactsBySquaresAEV(list));
+    }
+
     @GetMapping("/find_my_artifacts")
     public ModelAndView find_my_artifacts() {
 
         ModelAndView mv = new ModelAndView();
         mv.setViewName("find_my_artifacts");
-        mv.addObject("params", new MyFieldInventory());
+        mv.addObject("myFieldInventory", new MyFieldInventory());
         mv.addObject("fieldinventories", Collections.emptyList());
         mv.addObject("title", "Мои находки");
 
@@ -437,15 +473,15 @@ public class ArtifactController {
 
     @PostMapping("/find_my_artifacts")
     public ModelAndView find_my_artifacts(
-            @ModelAttribute MyFieldInventory params,
+            @ModelAttribute MyFieldInventory myFieldInventory,
             BindingResult result,
             SessionStatus status) {
 
-        List<Map<String, Object>> list = artifactDao.findMyArtifacts(params.getName());
+        List<Map<String, Object>> list = artifactDao.findMyArtifacts(myFieldInventory.getName());
 
         ModelAndView mv = new ModelAndView();
         mv.setViewName("find_my_artifacts");
-        mv.addObject("params", params);
+        mv.addObject("myFieldInventory", myFieldInventory);
         mv.addObject("error", result.hasErrors());
         mv.addObject("notfound", list.isEmpty() && !result.hasErrors());
         mv.addObject("fieldinventories", list);
@@ -459,7 +495,7 @@ public class ArtifactController {
 
         ModelAndView mv = new ModelAndView();
         mv.setViewName("find_artifacts_by_days");
-        mv.addObject("params", new ArtifactsByDays());
+        mv.addObject("artifactsByDays", new ArtifactsByDays());
         mv.addObject("fieldinventories", Collections.emptyList());
         mv.addObject("title", "Опись находок по заданным дням");
 
@@ -468,20 +504,26 @@ public class ArtifactController {
 
     @PostMapping("/find_artifacts_by_days")
     public ModelAndView find_artifacts_by_days(
-            @ModelAttribute ArtifactsByDays params,
+            @ModelAttribute("artifactsByDays") ArtifactsByDays artifactsByDays,
             BindingResult result,
             SessionStatus status) {
 
-        List<Map<String, Object>> list = artifactDao.fieldInventoryByPeriod(params.getFrom(),params.getTill());
+        List<Map<String, Object>> list = artifactDao.fieldInventoryByPeriod(artifactsByDays.getFrom(),artifactsByDays.getTill());
 
         ModelAndView mv = new ModelAndView();
-        mv.addObject("params", params);
+        mv.addObject("artifactsByDays", artifactsByDays);
         mv.addObject("error", result.hasErrors());
         mv.addObject("notfound", list.isEmpty() && !result.hasErrors());
         mv.addObject("fieldinventories", list);
         mv.addObject("title", "Опись находок по заданным дням");
 
         return mv;
+    }
+
+    @GetMapping("/find_artifacts_by_days_export")
+    public ModelAndView find_artifacts_by_days_export(@ModelAttribute("artifactsByDays") ArtifactsByDays artifactsByDays) {
+        List<Map<String, Object>> list = artifactDao.fieldInventoryByPeriod(artifactsByDays.getFrom(),artifactsByDays.getTill());
+        return new ModelAndView(new ArtifactsByDaysAEV(list));
     }
 
     @GetMapping("/field_inventory_by_squares_and_depth")
@@ -496,9 +538,15 @@ public class ArtifactController {
         return mv;
     }
 
+    @GetMapping("/field_inventory_by_squares_and_depth_export")
+    public ModelAndView field_inventory_by_squares_and_depth_export(@ModelAttribute("params") ArtifactsBySquaresAndDepth params) {
+        List<Map<String, Object>> list = artifactDao.fieldInventoryBySquaresAndDepth(params.getSquares(),params.getDepth_from(), params.getDepth_till());
+        return new ModelAndView(new FieldInventoryAbstractExcelView(list));
+    }
+
     @PostMapping("/field_inventory_by_squares_and_depth")
     public ModelAndView field_inventory_by_squares_and_depth(
-            @ModelAttribute ArtifactsBySquaresAndDepth params,
+            @ModelAttribute("params") ArtifactsBySquaresAndDepth params,
             BindingResult result,
             SessionStatus status) {
 
@@ -525,12 +573,18 @@ public class ArtifactController {
         return mv;
     }
 
+    @GetMapping("/all_sites_description_export")
+    public ModelAndView all_sites_description_export() {
+        List<Map<String,Object>> list = artifactDao.allSitesDescription();
+        return new ModelAndView(new AllSitesAEV(list));
+    }
+
     @GetMapping("/size_of_artifacts_by_square_and_depth")
     public ModelAndView size_of_artifacts_by_square_and_depth() {
 
         ModelAndView mv = new ModelAndView();
         mv.setViewName("size_of_artifacts_by_square_and_depth");
-        mv.addObject("params", new ArtifactsBySquaresAndDepth());
+        mv.addObject("sizeOfArtifactsBySquareAndDepth", new SizeOfArtifactsBySquareAndDepth());
         mv.addObject("fieldinventories", Collections.emptyList());
         mv.addObject("title", "Размеры фрагментов по квадрату и глубине");
 
@@ -539,14 +593,14 @@ public class ArtifactController {
 
     @PostMapping("/size_of_artifacts_by_square_and_depth")
     public ModelAndView size_of_artifacts_by_square_and_depth(
-            @ModelAttribute ArtifactsBySquaresAndDepth params,
+            @ModelAttribute SizeOfArtifactsBySquareAndDepth sizeOfArtifactsBySquareAndDepth,
             BindingResult result,
             SessionStatus status) {
 
-        List<Map<String, Object>> list = artifactDao.sizeOfArtifactsBySquareAndDepth(params.getSquares(),params.getDepth_from(), params.getDepth_till());
+        List<Map<String, Object>> list = artifactDao.sizeOfArtifactsBySquareAndDepth(sizeOfArtifactsBySquareAndDepth.getSquares(),sizeOfArtifactsBySquareAndDepth.getDepth_from(), sizeOfArtifactsBySquareAndDepth.getDepth_till());
 
         ModelAndView mv = new ModelAndView();
-        mv.addObject("params", params);
+        mv.addObject("sizeOfArtifactsBySquareAndDepth", sizeOfArtifactsBySquareAndDepth);
         mv.addObject("error", result.hasErrors());
         mv.addObject("notfound", list.isEmpty() && !result.hasErrors());
         mv.addObject("fieldinventories", list);
@@ -555,6 +609,10 @@ public class ArtifactController {
         return mv;
     }
 
-
+    @GetMapping("/size_of_artifacts_by_square_and_depth_export")
+    public ModelAndView size_of_artifacts_by_square_and_depth_export(@ModelAttribute("sizeOfArtifactsBySquareAndDepth") SizeOfArtifactsBySquareAndDepth sizeOfArtifactsBySquareAndDepth) {
+        List<Map<String, Object>> list = artifactDao.sizeOfArtifactsBySquareAndDepth(sizeOfArtifactsBySquareAndDepth.getSquares(),sizeOfArtifactsBySquareAndDepth.getDepth_from(), sizeOfArtifactsBySquareAndDepth.getDepth_till());
+        return new ModelAndView(new SizeOfArtifactsBySquareAndDepthAEV(list));
+    }
 
 }

@@ -248,7 +248,7 @@ public class ArtifactDaoImpl implements ArtifactDao {
                 "ON layer.id = artifact.layer_id) " +
                 "ON material.id = artifact.material_id) " +
                 "ON square.id = artifact.square_id " +
-                "WHERE (employee.fio = ?)", name);
+                "WHERE (employee.fio LIKE '"+"%"+name+"%' )");
     }
 
     @Override

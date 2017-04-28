@@ -23,7 +23,7 @@
                         <div th:if="${notfound}">
                             Not Found
                         </div>
-                        <form th:action="@{/find_employee_by_artifact_id}" th:object="${params}" method="post">
+                        <form th:action="@{/find_employee_by_artifact_id}" th:object="${employeeByArtifactId}" method="post">
                             <p>
                             <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
                                 <input id="a_id" class="mdl-textfield__input" type="text" th:field="*{artifactId}"/>

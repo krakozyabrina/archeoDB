@@ -23,11 +23,11 @@
                         <div th:if="${notfound}">
                             Not Found
                         </div>
-                        <form th:action="@{/find_my_artifacts}" th:object="${params}" method="post">
+                        <form th:action="@{/find_my_artifacts}" th:object="${myFieldInventory}" method="post">
                             <p>
                             <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
                                 <input id="a_name" class="mdl-textfield__input" type="text" th:field="*{name}"/>
-                                <label class="mdl-textfield__label" for="a_name">Моё полное имя(ФИО)</label>
+                                <label class="mdl-textfield__label" for="a_name">Фамилия и Имя</label>
                             </div>
                             </p>
                             <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--primary"

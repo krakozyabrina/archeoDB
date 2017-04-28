@@ -17,15 +17,18 @@
                     <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon" id="show-dialog">
                         <i class="material-icons">filter_list</i>
                     </button>
+                    <a class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon" th:href="@{/find_artifacts_by_days_export}">
+                        <i class="material-icons">file_download</i>
+                    </a>
                 </div>
                 <div class="mdl-color-text--grey-600">
 
                     <div class="params" th:unless="${error}">
                         <div>
-                            <b>Начало периода: </b><span th:text="${{params.from}}"></span>
+                            <b>Начало периода: </b><span th:text="${{artifactsByDays.from}}"></span>
                         </div>
                         <div>
-                            <b>Конец периода: </b><span th:text="${{params.till}}"></span>
+                            <b>Конец периода: </b><span th:text="${{artifactsByDays.till}}"></span>
                         </div>
                     </div>
 
@@ -87,13 +90,13 @@
 </div>
 
 <dialog class="mdl-dialog">
-    <h4 class="mdl-dialog__title">Allow data collection?</h4>
+    <h4 class="mdl-dialog__title">Параметры</h4>
     <div class="mdl-dialog__content">
         <p>
-            Allowing us to collect data will let us get you the information you want faster.
+            Введите параметры.
         </p>
         <div>
-            <form id="search_form" th:action="@{/find_artifacts_by_days}" th:object="${params}" method="post">
+            <form id="search_form" th:action="@{/find_artifacts_by_days}" th:object="${artifactsByDays}" method="post">
                 <p>
                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
                     <input id="a_from2" class="mdl-textfield__input" type="text" th:field="*{from}"/>
@@ -110,8 +113,8 @@
         </div>
     </div>
     <div class="mdl-dialog__actions">
-        <button type="button" class="mdl-button ok">Agree</button>
-        <button type="button" class="mdl-button close">Disagree</button>
+        <button type="button" class="mdl-button ok">Найти</button>
+        <button type="button" class="mdl-button close">Отменить</button>
     </div>
 </dialog>
 <script>

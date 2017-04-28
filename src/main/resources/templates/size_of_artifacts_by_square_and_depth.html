@@ -17,18 +17,21 @@
                     <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon" id="show-dialog">
                         <i class="material-icons">filter_list</i>
                     </button>
+                    <a class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon" th:href="@{/size_of_artifacts_by_square_and_depth_export}">
+                        <i class="material-icons">file_download</i>
+                    </a>
                 </div>
                 <div class="mdl-color-text--grey-600">
 
                     <div class="params" th:unless="${error}">
                         <div>
-                            <b>Квадраты: </b><span th:text="${{params.squares}}"></span>
+                            <b>Квадраты: </b><span th:text="${{sizeOfArtifactsBySquareAndDepth.squares}}"></span>
                         </div>
                         <div>
-                            <b>Глубина от: </b><span th:text="${{params.depth_from}}"></span>
+                            <b>Глубина от: </b><span th:text="${{sizeOfArtifactsBySquareAndDepth.depth_from}}"></span>
                         </div>
                         <div>
-                            <b>Глубина до: </b><span th:text="${{params.depth_till}}"></span>
+                            <b>Глубина до: </b><span th:text="${{sizeOfArtifactsBySquareAndDepth.depth_till}}"></span>
                         </div>
                     </div>
 
@@ -76,7 +79,7 @@
             Укажите параметры
         </p>
         <div>
-            <form id="search_form" th:action="@{/size_of_artifacts_by_square_and_depth}" th:object="${params}" method="post">
+            <form id="search_form" th:action="@{/size_of_artifacts_by_square_and_depth}" th:object="${sizeOfArtifactsBySquareAndDepth}" method="post">
                 <p>
                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
                     <input id="a_squares" class="mdl-textfield__input" type="text" th:field="*{squares}"/>
