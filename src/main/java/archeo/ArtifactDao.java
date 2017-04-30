@@ -38,4 +38,19 @@ public interface ArtifactDao {
     List<Map<String, Object>> allSitesDescription();
     List<Map<String, Object>> sizeOfArtifactsBySquareAndDepth(List<String> squares, Float depth_from, Float depth_till);
 
+    List<Hydroobject> findAllHydroobjects();
+
+    void saveHydroobject(Hydroobject hydroobject);
+
+    void saveSettlement(Settlement settlement);
+
+    List<Settlement> findAllSettlements();
+
+    List<Characteristic> findAllCharacteristics();
+
+    void saveCharacteristic(Characteristic characteristic);
+
+    List<SiteObject> findAllSiteobjects();
+
+    void saveSiteobject(SiteObject siteobject);
 }

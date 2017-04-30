@@ -3,14 +3,11 @@ package archeo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.view.document.AbstractXlsView;
 
 import java.security.Principal;
 import java.util.Collections;
@@ -63,6 +60,8 @@ public class ArtifactController {
         mv.addObject("positions", artifactDao.findAllPositions());
         mv.addObject("employees", artifactDao.findAllEmployees());
         mv.addObject("sites", artifactDao.findAllSites());
+        mv.addObject("siteobjects", artifactDao.findAllSiteobjects());
+        mv.addObject("characteristics", artifactDao.findAllCharacteristics());
         mv.addObject("title", "Добавление находок");
 
         return mv;
@@ -86,10 +85,10 @@ public class ArtifactController {
         mv.addObject("positions", artifactDao.findAllPositions());
         mv.addObject("employees", artifactDao.findAllEmployees());
         mv.addObject("sites", artifactDao.findAllSites());
+        mv.addObject("siteobjects", artifactDao.findAllSiteobjects());
+        mv.addObject("characteristics", artifactDao.findAllCharacteristics());
         mv.addObject("title", "Добавление находок");
         mv.addObject("error", result.hasErrors());
-
-        //artifactDao.findAll();
 
         return mv;
     }
@@ -309,6 +308,10 @@ public class ArtifactController {
         mv.setViewName("addsite");
         mv.addObject("site", site);
         mv.addObject("sites", artifactDao.findAllSites());
+        mv.addObject("epochs", artifactDao.findAllEpochs());
+        mv.addObject("hydroobjects", artifactDao.findAllHydroobjects());
+        mv.addObject("settlements", artifactDao.findAllSettlements());
+        mv.addObject("regions", artifactDao.findAllRegions());
         mv.addObject("title","Добавить памятник");
 
 
@@ -324,7 +327,123 @@ public class ArtifactController {
         mv.setViewName("addsite");
         mv.addObject("site", site);
         mv.addObject("sites", artifactDao.findAllSites());
+        mv.addObject("epochs", artifactDao.findAllEpochs());
+        mv.addObject("hydroobjects", artifactDao.findAllHydroobjects());
+        mv.addObject("settlements", artifactDao.findAllSettlements());
+        mv.addObject("regions", artifactDao.findAllRegions());
         mv.addObject("title","Добавить памятник");
+
+        return mv;
+    }
+
+    @GetMapping("/addhydroobject")
+    public ModelAndView addhydroobject() {
+
+        ModelAndView mv = new ModelAndView();
+        Hydroobject hydroobject = new Hydroobject();
+        mv.setViewName("addhydroobject");
+        mv.addObject("hydroobject", hydroobject);
+        mv.addObject("hydroobjects", artifactDao.findAllHydroobjects());
+        mv.addObject("title","Добавить объект гидросети");
+
+
+        return mv;
+    }
+
+    @PostMapping("/addhydroobject")
+    public ModelAndView hydroobjectSubmit(@ModelAttribute Hydroobject hydroobject) {
+
+        artifactDao.saveHydroobject(hydroobject);
+
+        ModelAndView mv = new ModelAndView();
+        mv.setViewName("addhydroobject");
+        mv.addObject("hydroobject", hydroobject);
+        mv.addObject("hydroobjects", artifactDao.findAllHydroobjects());
+        mv.addObject("title","Добавить объект гидросети");
+
+        return mv;
+    }
+
+    @GetMapping("/addsettlement")
+    public ModelAndView addsettlement() {
+
+        ModelAndView mv = new ModelAndView();
+        Settlement settlement = new Settlement();
+        mv.setViewName("addsettlement");
+        mv.addObject("settlement", settlement);
+        mv.addObject("settlements", artifactDao.findAllSettlements());
+        mv.addObject("title","Добавить населённый пункт");
+
+
+        return mv;
+    }
+
+    @PostMapping("/addsettlement")
+    public ModelAndView settlementSubmit(@ModelAttribute Settlement settlement) {
+
+        artifactDao.saveSettlement(settlement);
+
+        ModelAndView mv = new ModelAndView();
+        mv.setViewName("addsettlement");
+        mv.addObject("settlement", settlement);
+        mv.addObject("settlements", artifactDao.findAllSettlements());
+        mv.addObject("title","Добавить населённый пункт");
+
+        return mv;
+    }
+
+    @GetMapping("/addcharacteristic")
+    public ModelAndView addcharacteristic() {
+
+        ModelAndView mv = new ModelAndView();
+        Characteristic characteristic = new Characteristic();
+        mv.setViewName("addcharacteristic");
+        mv.addObject("characteristic", characteristic);
+        mv.addObject("characteristics", artifactDao.findAllCharacteristics());
+        mv.addObject("title","Добавить характеристику");
+
+
+        return mv;
+    }
+
+    @PostMapping("/addcharacteristic")
+    public ModelAndView characteristicSubmit(@ModelAttribute Characteristic characteristic) {
+
+        artifactDao.saveCharacteristic(characteristic);
+
+        ModelAndView mv = new ModelAndView();
+        mv.setViewName("addcharacteristic");
+        mv.addObject("characteristic", characteristic);
+        mv.addObject("characteristics", artifactDao.findAllCharacteristics());
+        mv.addObject("title","Добавить характеристику");
+
+        return mv;
+    }
+
+    @GetMapping("/addsiteobject")
+    public ModelAndView addsiteobject() {
+
+        ModelAndView mv = new ModelAndView();
+        SiteObject siteobject = new SiteObject();
+        mv.setViewName("addsiteobject");
+        mv.addObject("siteobject", siteobject);
+        mv.addObject("siteobjects", artifactDao.findAllSiteobjects());
+        mv.addObject("title","Добавить объект");
+
+
+        return mv;
+    }
+
+    @PostMapping("/addsiteobject")
+    public ModelAndView siteobjectSubmit(@ModelAttribute SiteObject siteobject) {
+
+        artifactDao.saveSiteobject(siteobject);
+
+        ModelAndView mv = new ModelAndView();
+        mv.setViewName("addsiteobject");
+        mv.addObject("siteobject", siteobject);
+        mv.addObject("siteobjects", artifactDao.findAllSiteobjects());
+        mv.addObject("title","Добавить объект");
 
         return mv;
     }
@@ -344,7 +463,7 @@ public class ArtifactController {
     @GetMapping("/fieldinventory_export")
     public ModelAndView fieldinventory_export() {
         List<Fieldinventory> fieldinventories = artifactDao.fieldInventory();
-        return new ModelAndView(new FieldInventoryAEL(fieldinventories));
+        return new ModelAndView(new FieldInventoryAEV(fieldinventories));
     }
 
     @GetMapping("/count_artifacts_by_squares_on_depth")

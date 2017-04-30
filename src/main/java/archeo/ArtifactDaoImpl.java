@@ -26,13 +26,13 @@ public class ArtifactDaoImpl implements ArtifactDao {
     public void save(Artifact artifact) {
 
         jdbcTemplate.update("INSERT INTO " +
-                "artifact(id, title,description,find_date,sizex,sizey,sizez,cipher,depth,coord_north,coord_west, material_id, square_id, layer_id, employee_id, site_id)" +
-                " VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+                "artifact(id, title,description,find_date,sizex,sizey,sizez,cipher,depth,coord_north,coord_west, material_id, square_id, layer_id, employee_id, site_id, siteobject_id, characteristic_id)" +
+                " VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
                 artifact.getId(), artifact.getTitle(), artifact.getDescription(), artifact.getFind_date(),
                 artifact.getSizex(), artifact.getSizey(), artifact.getSizez(), artifact.getCipher(),
                 artifact.getDepth(), artifact.getCoord_north(), artifact.getCoord_west(),
                 artifact.getMaterial_id(), artifact.getSquare_id(), artifact.getLayer_id(),
-                artifact.getEmployee_id(), artifact.getSite_id());
+                artifact.getEmployee_id(), artifact.getSite_id(), artifact.getSiteobject_id(), artifact.getCharacteristic_id());
     }
 
     @Override
@@ -144,7 +144,7 @@ public class ArtifactDaoImpl implements ArtifactDao {
 
     @Override
     public void saveSite(Site site) {
-        jdbcTemplate.update("INSERT INTO site(site_title, site_comments, region_id, epoch_id) VALUES (?,?,?,?)", site.getSite_title(), site.getSite_comments(), site.getRegion_id(), site.getEpoch_id());
+        jdbcTemplate.update("INSERT INTO site(site_title, site_comments, region_id, settlement_id, hydroobject_id, epoch_id) VALUES (?,?,?,?,?,?)", site.getSite_title(), site.getSite_comments(), site.getRegion_id(), site.getSettlement_id(), site.getHydroobject_id(), site.getEpoch_id());
     }
 
     @Override
@@ -155,6 +155,8 @@ public class ArtifactDaoImpl implements ArtifactDao {
             s.setSite_title(resultSet.getString("site_title"));
             s.setSite_comments(resultSet.getString("site_comments"));
             s.setRegion_id(resultSet.getInt("region_id"));
+            s.setSettlement_id(resultSet.getInt("settlement_id"));
+            s.setHydroobject_id(resultSet.getInt("hydroobject_id"));
             s.setEpoch_id(resultSet.getInt("epoch_id"));
             return s;
         });
@@ -163,38 +165,45 @@ public class ArtifactDaoImpl implements ArtifactDao {
     @Override
     public List<Fieldinventory> fieldInventory() {
         return jdbcTemplate.query("SELECT artifact.id, " +
-                "artifact.title, " +
-                "artifact.description, " +
-                "artifact.find_date, " +
-                "artifact.sizex, " +
-                "artifact.sizey, " +
-                "artifact.sizez, " +
                 "artifact.cipher, " +
+                "material.material, " +
+                "artifact.description, " +
+                "siteobject.siteobject, " +
+                "characteristic.characteristic, " +
+                "artifact.title, " +
+                "square.square, " +
                 "artifact.depth, " +
                 "artifact.coord_north, " +
                 "artifact.coord_west, " +
-                "square.square, " +
-                "material.material, " +
                 "layer.layer, " +
+                "artifact.sizex, " +
+                "artifact.sizey, " +
+                "artifact.sizez, " +
+                "artifact.sizex*artifact.sizey as area, "+
+                "artifact.find_date, " +
                 "site.site_title, " +
                 "region.region " +
                 "FROM artifact " +
-                "left join layer on layer.id = artifact.layer_id left join site on site.id = artifact.site_id left join material on material.id = artifact.material_id left join square on square.id = artifact.square_id left join region on region.id = site.region_id "+
+                "left join layer on layer.id = artifact.layer_id left join site on site.id = artifact.site_id left join material on material.id = artifact.material_id left join square on square.id = artifact.square_id left join region on region.id = site.region_id left join siteobject on siteobject.id = artifact.siteobject_id left join characteristic on characteristic.id = artifact.characteristic_id "+
                 "ORDER BY artifact.id", (resultSet, rowNum) -> {
             Fieldinventory fieldinventory = new Fieldinventory();
             fieldinventory.setId(resultSet.getLong("id"));
-            fieldinventory.setTitle(resultSet.getString("title"));
-            fieldinventory.setDescription(resultSet.getString("description"));
-            fieldinventory.setSizex(resultSet.getFloat("sizex"));
-            fieldinventory.setSizey(resultSet.getFloat("sizey"));
-            fieldinventory.setSizez(resultSet.getFloat("sizez"));
             fieldinventory.setCipher(resultSet.getString("cipher"));
+            fieldinventory.setMaterial(resultSet.getString("material"));
+            fieldinventory.setDescription(resultSet.getString("description"));
+            fieldinventory.setSiteobject(resultSet.getString("siteobject"));
+            fieldinventory.setCharacteristic(resultSet.getString("characteristic"));
+            fieldinventory.setTitle(resultSet.getString("title"));
+            fieldinventory.setSquare(resultSet.getString("square"));
             fieldinventory.setDepth(resultSet.getFloat("depth"));
             fieldinventory.setCoord_north(resultSet.getFloat("coord_north"));
             fieldinventory.setCoord_west(resultSet.getFloat("coord_west"));
-            fieldinventory.setSquare(resultSet.getString("square"));
-            fieldinventory.setMaterial(resultSet.getString("material"));
             fieldinventory.setLayer(resultSet.getString("layer"));
+            fieldinventory.setSizex(resultSet.getFloat("sizex"));
+            fieldinventory.setSizey(resultSet.getFloat("sizey"));
+            fieldinventory.setSizez(resultSet.getFloat("sizez"));
+            fieldinventory.setArea(resultSet.getFloat("area"));
+            fieldinventory.setFind_date(resultSet.getDate("find_date"));
             fieldinventory.setSite_title(resultSet.getString("site_title"));
             fieldinventory.setRegion(resultSet.getString("region"));
             return fieldinventory;
@@ -350,6 +359,66 @@ public class ArtifactDaoImpl implements ArtifactDao {
                 "ON square.id = artifact.square_id " +
                 "WHERE square.square in ( " + listParam + " )" +
                 "and artifact.depth between ? and ?", depth_from, depth_till);
+    }
+
+    @Override
+    public List<Hydroobject> findAllHydroobjects() {
+        return jdbcTemplate.query("select * from hydroobject", (resultSet, rowNum) -> {
+            Hydroobject h = new Hydroobject();
+            h.setId(resultSet.getInt("id"));
+            h.setHydroobject(resultSet.getString("hydroobject"));
+            return h;
+        });
+    }
+
+    @Override
+    public void saveHydroobject(Hydroobject hydroobject) {
+        jdbcTemplate.update("INSERT INTO hydroobject(hydroobject) VALUES (?)", hydroobject.getHydroobject());
+    }
+
+    @Override
+    public void saveSettlement(Settlement settlement) {
+        jdbcTemplate.update("INSERT INTO settlement(settlement) VALUES (?)", settlement.getSettlement());
+    }
+
+    @Override
+    public List<Settlement> findAllSettlements() {
+        return jdbcTemplate.query("SELECT * FROM settlement", (resultSet, rowNum) -> {
+            Settlement s = new Settlement();
+            s.setId(resultSet.getInt("id"));
+            s.setSettlement(resultSet.getString("settlement"));
+            return s;
+        });
+    }
+
+    @Override
+    public List<Characteristic> findAllCharacteristics() {
+        return jdbcTemplate.query("SELECT * FROM characteristic", (resultSet, rowNum) -> {
+            Characteristic c = new Characteristic();
+            c.setId(resultSet.getInt("id"));
+            c.setCharacteristic(resultSet.getString("characteristic"));
+            return c;
+        });
+    }
+
+    @Override
+    public void saveCharacteristic(Characteristic characteristic) {
+        jdbcTemplate.update("INSERT INTO characteristic(characteristic) VALUES (?)", characteristic.getCharacteristic());
+    }
+
+    @Override
+    public List<SiteObject> findAllSiteobjects() {
+        return jdbcTemplate.query("SELECT * FROM siteobject", (resultSet, rowNum) -> {
+            SiteObject s = new SiteObject();
+            s.setId(resultSet.getInt("id"));
+            s.setSiteobject(resultSet.getString("siteobject"));
+            return s;
+        });
+    }
+
+    @Override
+    public void saveSiteobject(SiteObject siteobject) {
+        jdbcTemplate.update("INSERT INTO siteobject(siteobject) VALUES (?)", siteobject.getSiteobject());
     }
 
 }

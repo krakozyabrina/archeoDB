@@ -9,6 +9,8 @@ public class Site {
     private String site_comments;
     private Integer region_id;
     private Integer epoch_id;
+    private Integer settlement_id;
+    private Integer hydroobject_id;
 
     public Integer getId() {
         return id;
@@ -48,5 +50,21 @@ public class Site {
 
     public void setEpoch_id(Integer epoch_id) {
         this.epoch_id = epoch_id;
+    }
+
+    public Integer getSettlement_id() {
+        return settlement_id;
+    }
+
+    public void setSettlement_id(Integer settlement_id) {
+        this.settlement_id = settlement_id;
+    }
+
+    public Integer getHydroobject_id() {
+        return hydroobject_id;
+    }
+
+    public void setHydroobject_id(Integer hydroobject_id) {
+        this.hydroobject_id = hydroobject_id;
     }
 }

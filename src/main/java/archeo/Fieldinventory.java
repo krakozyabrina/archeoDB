@@ -39,6 +39,12 @@ public class Fieldinventory {
 
     private String region;
 
+    private Float area;
+
+    private String siteobject;
+
+    private String characteristic;
+
     public Long getId() {
         return id;
     }
@@ -165,5 +171,29 @@ public class Fieldinventory {
 
     public void setRegion(String region) {
         this.region = region;
+    }
+
+    public Float getArea() {
+        return area;
+    }
+
+    public void setArea(Float area) {
+        this.area = area;
+    }
+
+    public String getSiteobject() {
+        return siteobject;
+    }
+
+    public void setSiteobject(String siteobject) {
+        this.siteobject = siteobject;
+    }
+
+    public String getCharacteristic() {
+        return characteristic;
+    }
+
+    public void setCharacteristic(String characteristic) {
+        this.characteristic = characteristic;
     }
 }

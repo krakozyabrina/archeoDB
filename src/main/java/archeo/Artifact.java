@@ -45,6 +45,10 @@ public class Artifact {
 
     private Integer site_id;
 
+    private Integer siteobject_id;
+
+    private Integer characteristic_id;
+
     public Long getId() {
         return id;
     }
@@ -212,6 +216,22 @@ public class Artifact {
 
     public void setSite_id(Integer site_id) {
         this.site_id = site_id;
+    }
+
+    public Integer getSiteobject_id() {
+        return siteobject_id;
+    }
+
+    public void setSiteobject_id(Integer siteobject_id) {
+        this.siteobject_id = siteobject_id;
+    }
+
+    public Integer getCharacteristic_id() {
+        return characteristic_id;
+    }
+
+    public void setCharacteristic_id(Integer characteristic_id) {
+        this.characteristic_id = characteristic_id;
     }
 
     public static Artifact generateRandom() {
