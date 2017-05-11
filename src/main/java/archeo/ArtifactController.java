@@ -20,7 +20,10 @@ import java.util.Map;
         ArtifactsByDays.class,
         EmployeeByArtifactId.class,
         MyFieldInventory.class,
-        SizeOfArtifactsBySquareAndDepth.class})
+        SizeOfArtifactsBySquareAndDepth.class,
+        FieldInventoryByCharacteristic.class,
+        FieldInventoryByObjectAndDepth.class,
+        FieldInventoryByNumber.class})
 public class ArtifactController {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -46,12 +49,30 @@ public class ArtifactController {
         return mv;
     }
 
+    @GetMapping("/about")
+    public ModelAndView about() {
+
+        ModelAndView mv = new ModelAndView();
+        mv.setViewName("about");
+        mv.addObject("title", "О программе");
+        return mv;
+    }
+
+    @GetMapping("/help")
+    public ModelAndView help() {
+
+        ModelAndView mv = new ModelAndView();
+        mv.setViewName("help");
+        mv.addObject("title", "Помощь");
+        return mv;
+    }
+
     @GetMapping("/addArtifact")
     public ModelAndView artifactForm() {
 
         ModelAndView mv = new ModelAndView();
         mv.setViewName("addArtifact");
-        mv.addObject("artifact", Artifact.generateRandom());
+        mv.addObject("artifact", new Artifact());
         mv.addObject("materials", artifactDao.findAllMaterials());
         mv.addObject("squares", artifactDao.findAllSquares());
         mv.addObject("epochs", artifactDao.findAllEpochs());
@@ -494,6 +515,141 @@ public class ArtifactController {
     public ModelAndView count_artifacts_by_squares_on_depth_export(@ModelAttribute("artifactsBySquaresOnDepth") ArtifactsBySquaresOnDepth artifactsBySquaresOnDepth) {
         List<Map<String, Object>> list = artifactDao.countArtifactsBySquares(artifactsBySquaresOnDepth.getFrom(),artifactsBySquaresOnDepth.getTo());
         return new ModelAndView(new CountArtifactsBySquaresOnDepthAEV(list));
+    }
+
+    @GetMapping("/field_inventory_by_number")
+    public ModelAndView field_inventory_by_number() {
+
+        ModelAndView mv = new ModelAndView();
+        mv.setViewName("field_inventory_by_number");
+        mv.addObject("fieldInventoryByNumber", new FieldInventoryByNumber());
+        mv.addObject("fieldinventories", Collections.emptyList());
+        mv.addObject("title", "Опись предметов по номеру в описи");
+
+        return mv;
+    }
+
+    @PostMapping("/field_inventory_by_number")
+    public ModelAndView field_inventory_by_number(@ModelAttribute("fieldInventoryByNumber") FieldInventoryByNumber fieldInventoryByNumber) {
+
+        ModelAndView mv = new ModelAndView();
+        mv.setViewName("field_inventory_by_number");
+        mv.addObject("fieldInventoryByNumber", fieldInventoryByNumber);
+        mv.addObject("fieldinventories", artifactDao.fieldInventoryByNumber(fieldInventoryByNumber.getInv_num()));
+        mv.addObject("title", "Опись предметов по номеру в описи");
+
+        return mv;
+    }
+
+    @GetMapping("/field_inventory_by_number_export")
+    public ModelAndView field_inventory_by_number_export(@ModelAttribute("fieldInventoryByNumber") FieldInventoryByNumber fieldInventoryByNumber) {
+        List<Map<String, Object>> list = artifactDao.fieldInventoryByNumber(fieldInventoryByNumber.getInv_num());
+        return new ModelAndView(new FieldInventoryByNumberAEV(list));
+    }
+
+    @GetMapping("/field_inventory_by_number_remove")
+    public ModelAndView deleteArtifact(@RequestParam("id") Long id) {
+        artifactDao.deleteArtifact(id);
+
+        ModelAndView mv = new ModelAndView();
+        mv.setViewName("field_inventory_by_number");
+        mv.addObject("title", "Удаление записи завершено");
+        return mv;
+    }
+
+    @GetMapping("/field_inventory_by_number_change")
+    public ModelAndView editArtifact(@RequestParam("id") Integer id) {
+        ModelAndView mv = new ModelAndView();
+        mv.setViewName("field_inventory_by_number_change");
+        mv.addObject("artifact", artifactDao.findArtifactById(id));
+        mv.addObject("materials", artifactDao.findAllMaterials());
+        mv.addObject("squares", artifactDao.findAllSquares());
+        mv.addObject("epochs", artifactDao.findAllEpochs());
+        mv.addObject("layers", artifactDao.findAllLayers());
+        mv.addObject("employees", artifactDao.findAllEmployees());
+        mv.addObject("sites", artifactDao.findAllSites());
+        mv.addObject("siteobjects", artifactDao.findAllSiteobjects());
+        mv.addObject("characteristics", artifactDao.findAllCharacteristics());
+        mv.addObject("title", "Редактирование предмета по номеру в описи");
+        return mv;
+    }
+
+    @PostMapping("/field_inventory_by_number_change")
+    public ModelAndView updateArtifact(@ModelAttribute Artifact artifact,
+                                       BindingResult result,
+                                       SessionStatus status) {
+
+        artifactDao.changeArtifact(artifact);
+
+        ModelAndView mv = new ModelAndView();
+        mv.setViewName("field_inventory_by_number");
+        mv.addObject("fieldinventories", artifactDao.fieldInventoryByNumber(artifact.getInv_num()));
+        mv.addObject("title", "Описание предмета скорректировано");
+        return mv;
+    }
+
+    @GetMapping("/field_inventory_by_characteristic")
+    public ModelAndView field_inventory_by_characteristic() {
+
+        ModelAndView mv = new ModelAndView();
+        mv.setViewName("field_inventory_by_characteristic");
+        mv.addObject("fieldInventoryByCharacteristic", new FieldInventoryByCharacteristic());
+        mv.addObject("fieldinventories", Collections.emptyList());
+        mv.addObject("title", "Опись предметов по характеристике");
+        mv.addObject("characteristics", artifactDao.findAllCharacteristics());
+
+        return mv;
+    }
+
+    @PostMapping("/field_inventory_by_characteristic")
+    public ModelAndView field_inventory_by_characteristic(@ModelAttribute("fieldInventoryByCharacteristic") FieldInventoryByCharacteristic fieldInventoryByCharacteristic) {
+
+        ModelAndView mv = new ModelAndView();
+        mv.setViewName("field_inventory_by_characteristic");
+        mv.addObject("fieldInventoryByCharacteristic", fieldInventoryByCharacteristic);
+        mv.addObject("fieldinventories", artifactDao.fieldInventoryByCharacteristic(fieldInventoryByCharacteristic.getCharacteristic_id()));
+        mv.addObject("title", "Опись предметов по характеристике");
+        mv.addObject("characteristics", artifactDao.findAllCharacteristics());
+
+        return mv;
+    }
+
+    @GetMapping("/field_inventory_by_characteristic_export")
+    public ModelAndView field_inventory_by_characteristic_export(@ModelAttribute("fieldInventoryByCharacteristic") FieldInventoryByCharacteristic fieldInventoryByCharacteristic) {
+        List<Map<String, Object>> list = artifactDao.fieldInventoryByCharacteristic(fieldInventoryByCharacteristic.getCharacteristic_id());
+        return new ModelAndView(new FieldInventoryByCharacteristicAEV(list));
+    }
+
+    @GetMapping("/field_inventory_by_object_and_depth")
+    public ModelAndView field_inventory_by_object_and_depth() {
+
+        ModelAndView mv = new ModelAndView();
+        mv.setViewName("field_inventory_by_object_and_depth");
+        mv.addObject("fieldInventoryByObjectAndDepth", new FieldInventoryByObjectAndDepth());
+        mv.addObject("fieldinventories", Collections.emptyList());
+        mv.addObject("title", "Опись предметов по объекту и глубине");
+        mv.addObject("siteobjects", artifactDao.findAllSiteobjects());
+
+        return mv;
+    }
+
+    @PostMapping("/field_inventory_by_object_and_depth")
+    public ModelAndView field_inventory_by_object_and_depth(@ModelAttribute("fieldInventoryByObjectAndDepth") FieldInventoryByObjectAndDepth fieldInventoryByObjectAndDepth) {
+
+        ModelAndView mv = new ModelAndView();
+        mv.setViewName("field_inventory_by_object_and_depth");
+        mv.addObject("fieldInventoryByObjectAndDepth", fieldInventoryByObjectAndDepth);
+        mv.addObject("fieldinventories", artifactDao.fieldInventoryByObjectAndDepth(fieldInventoryByObjectAndDepth.getSiteobject_id(),fieldInventoryByObjectAndDepth.getFrom(),fieldInventoryByObjectAndDepth.getTo()));
+        mv.addObject("title", "Опись предметов по объекту и глубине");
+        mv.addObject("siteobjects", artifactDao.findAllSiteobjects());
+
+        return mv;
+    }
+
+    @GetMapping("/field_inventory_by_object_and_depth_export")
+    public ModelAndView field_inventory_by_object_and_depth_export (@ModelAttribute("fieldInventoryByObjectAndDepth") FieldInventoryByObjectAndDepth fieldInventoryByObjectAndDepth) {
+        List<Map<String, Object>> list = artifactDao.fieldInventoryByObjectAndDepth(fieldInventoryByObjectAndDepth.getSiteobject_id(),fieldInventoryByObjectAndDepth.getFrom(),fieldInventoryByObjectAndDepth.getTo());
+        return new ModelAndView(new FieldInventoryByObjectAndDepthAEV(list));
     }
 
     @GetMapping("/count_artifacts_by_material")

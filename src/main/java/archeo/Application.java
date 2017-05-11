@@ -25,6 +25,7 @@ public class Application implements CommandLineRunner {
 
     private void initDB() {
 
+/*
         jdbcTemplate.execute("DROP TABLE IF EXISTS Material CASCADE");
         jdbcTemplate.execute("DROP TABLE IF EXISTS Artifact CASCADE");
         jdbcTemplate.execute("DROP TABLE IF EXISTS Square CASCADE");
@@ -51,7 +52,7 @@ public class Application implements CommandLineRunner {
         jdbcTemplate.execute("CREATE TABLE Characteristic(id SERIAL, characteristic VARCHAR(255), CONSTRAINT characteristic_pkey PRIMARY KEY (id))");
         jdbcTemplate.execute("CREATE TABLE SiteObject(id SERIAL, siteobject VARCHAR(255), CONSTRAINT siteobject_pkey PRIMARY KEY (id))");
         jdbcTemplate.execute("CREATE TABLE Site(id SERIAL, site_title VARCHAR(50), site_comments VARCHAR(250), region_id integer, settlement_id integer, hydroobject_id integer, epoch_id integer, FOREIGN KEY ( region_id ) REFERENCES region (id) ON DELETE RESTRICT ON UPDATE CASCADE, FOREIGN KEY ( settlement_id ) REFERENCES settlement (id) ON DELETE RESTRICT ON UPDATE CASCADE, FOREIGN KEY ( hydroobject_id ) REFERENCES hydroobject (id) ON DELETE RESTRICT ON UPDATE CASCADE, FOREIGN KEY ( epoch_id ) REFERENCES epoch (id) ON DELETE RESTRICT ON UPDATE CASCADE, CONSTRAINT site_pkey PRIMARY KEY (id))");
-        jdbcTemplate.execute("CREATE TABLE Artifact(id SERIAL NOT NULL, title VARCHAR(255), description VARCHAR(255), find_date timestamp without time zone, sizex real NOT NULL, sizey real NOT NULL, sizez real NOT NULL, cipher VARCHAR(25) UNIQUE, depth real NOT NULL, coord_north real NOT NULL, coord_west real NOT NULL, material_id integer, square_id integer, layer_id integer, employee_id integer, site_id integer, siteobject_id integer, characteristic_id integer, CONSTRAINT artifact_pkey PRIMARY KEY (id), FOREIGN KEY ( material_id ) REFERENCES material (id) ON DELETE RESTRICT ON UPDATE CASCADE, FOREIGN KEY ( square_id ) REFERENCES square (id) ON DELETE RESTRICT ON UPDATE CASCADE, FOREIGN KEY ( layer_id ) REFERENCES layer (id) ON DELETE RESTRICT ON UPDATE CASCADE, FOREIGN KEY ( employee_id ) REFERENCES employee (id) ON DELETE RESTRICT ON UPDATE CASCADE, FOREIGN KEY ( site_id ) REFERENCES site (id) ON DELETE RESTRICT ON UPDATE CASCADE, FOREIGN KEY ( characteristic_id ) REFERENCES characteristic (id) ON DELETE RESTRICT ON UPDATE CASCADE, FOREIGN KEY ( siteobject_id ) REFERENCES siteobject (id) ON DELETE RESTRICT ON UPDATE CASCADE)");
+        jdbcTemplate.execute("CREATE TABLE Artifact(id SERIAL NOT NULL, inv_num integer NOT NULL, title VARCHAR(255), description VARCHAR(255), find_date timestamp without time zone, sizex real NOT NULL, sizey real NOT NULL, sizez real NOT NULL, cipher VARCHAR(25) UNIQUE, depth real NOT NULL, coord_north real NOT NULL, coord_west real NOT NULL, material_id integer, square_id integer, layer_id integer, employee_id integer, site_id integer, siteobject_id integer, characteristic_id integer, CONSTRAINT artifact_pkey PRIMARY KEY (id), FOREIGN KEY ( material_id ) REFERENCES material (id) ON DELETE RESTRICT ON UPDATE CASCADE, FOREIGN KEY ( square_id ) REFERENCES square (id) ON DELETE RESTRICT ON UPDATE CASCADE, FOREIGN KEY ( layer_id ) REFERENCES layer (id) ON DELETE RESTRICT ON UPDATE CASCADE, FOREIGN KEY ( employee_id ) REFERENCES employee (id) ON DELETE RESTRICT ON UPDATE CASCADE, FOREIGN KEY ( site_id ) REFERENCES site (id) ON DELETE RESTRICT ON UPDATE CASCADE, FOREIGN KEY ( characteristic_id ) REFERENCES characteristic (id) ON DELETE RESTRICT ON UPDATE CASCADE, FOREIGN KEY ( siteobject_id ) REFERENCES siteobject (id) ON DELETE RESTRICT ON UPDATE CASCADE)");
 
         jdbcTemplate.update("INSERT INTO material(material) VALUES(?)", "Керамика");
         jdbcTemplate.update("INSERT INTO material(material) VALUES(?)", "Камень");
@@ -114,6 +115,7 @@ public class Application implements CommandLineRunner {
         jdbcTemplate.update("INSERT INTO siteobject(siteobject) VALUES(?)", "-");
 
         jdbcTemplate.update("INSERT INTO site(site_title, site_comments, region_id, settlement_id, hydroobject_id,  epoch_id) VALUES(?,?,?,?,?,?)", "Барсова гора II/42", "памятник пострадал при бурении нефтяной скважины", 1, 1, 1, 3);
+*/
 
     }
 

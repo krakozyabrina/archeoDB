@@ -31,11 +31,12 @@ public class CountArtifactsBySquaresOnDepthAEV extends AbstractXlsView {
                                       HttpServletResponse httpServletResponse) throws Exception {
 
 
-        Sheet sheet = workbook.createSheet("Общее количество находок по квадратам");
+        Sheet sheet = workbook.createSheet("Количество находок по квадратам на заданной глубине");
 
         Row header = sheet.createRow(0);
         header.createCell(0).setCellValue("Квадрат");
         header.createCell(1).setCellValue("Количество");
+        header.createCell(2).setCellValue("Номера находок в описи");
 
         int rowNum = 1;
         for (Map<String, Object> fields : objects) {

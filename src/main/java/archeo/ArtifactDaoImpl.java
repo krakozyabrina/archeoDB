@@ -3,6 +3,7 @@ package archeo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
@@ -26,9 +27,9 @@ public class ArtifactDaoImpl implements ArtifactDao {
     public void save(Artifact artifact) {
 
         jdbcTemplate.update("INSERT INTO " +
-                "artifact(id, title,description,find_date,sizex,sizey,sizez,cipher,depth,coord_north,coord_west, material_id, square_id, layer_id, employee_id, site_id, siteobject_id, characteristic_id)" +
+                "artifact(inv_num, title,description,find_date,sizex,sizey,sizez,cipher,depth,coord_north,coord_west, material_id, square_id, layer_id, employee_id, site_id, siteobject_id, characteristic_id)" +
                 " VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
-                artifact.getId(), artifact.getTitle(), artifact.getDescription(), artifact.getFind_date(),
+                artifact.getInv_num(), artifact.getTitle(), artifact.getDescription(), artifact.getFind_date(),
                 artifact.getSizex(), artifact.getSizey(), artifact.getSizez(), artifact.getCipher(),
                 artifact.getDepth(), artifact.getCoord_north(), artifact.getCoord_west(),
                 artifact.getMaterial_id(), artifact.getSquare_id(), artifact.getLayer_id(),
@@ -164,7 +165,7 @@ public class ArtifactDaoImpl implements ArtifactDao {
 
     @Override
     public List<Fieldinventory> fieldInventory() {
-        return jdbcTemplate.query("SELECT artifact.id, " +
+        return jdbcTemplate.query("SELECT artifact.inv_num, " +
                 "artifact.cipher, " +
                 "material.material, " +
                 "artifact.description, " +
@@ -187,7 +188,7 @@ public class ArtifactDaoImpl implements ArtifactDao {
                 "left join layer on layer.id = artifact.layer_id left join site on site.id = artifact.site_id left join material on material.id = artifact.material_id left join square on square.id = artifact.square_id left join region on region.id = site.region_id left join siteobject on siteobject.id = artifact.siteobject_id left join characteristic on characteristic.id = artifact.characteristic_id "+
                 "ORDER BY artifact.id", (resultSet, rowNum) -> {
             Fieldinventory fieldinventory = new Fieldinventory();
-            fieldinventory.setId(resultSet.getLong("id"));
+            fieldinventory.setInv_num(resultSet.getInt("inv_num"));
             fieldinventory.setCipher(resultSet.getString("cipher"));
             fieldinventory.setMaterial(resultSet.getString("material"));
             fieldinventory.setDescription(resultSet.getString("description"));
@@ -212,7 +213,7 @@ public class ArtifactDaoImpl implements ArtifactDao {
 
     @Override
     public List<Map<String, Object>> countArtifactsBySquares(Float from, Float to) {
-        return jdbcTemplate.queryForList("SELECT square.square AS square, Count(artifact.id) AS summa FROM square INNER JOIN artifact ON square.id = artifact.square_id WHERE ((artifact.depth) Between ? And ?) GROUP BY square.square", from, to);
+        return jdbcTemplate.queryForList("SELECT square.square AS square, Count(artifact.id) AS summa, array_agg(artifact.inv_num) AS inv_num FROM square INNER JOIN artifact ON square.id = artifact.square_id WHERE ((artifact.depth) Between ? And ?) GROUP BY square.square", from, to);
     }
 
     @Override
@@ -227,7 +228,7 @@ public class ArtifactDaoImpl implements ArtifactDao {
 
     @Override
     public List<Map<String, Object>> findEmployeeByArtifactId(Long artifactId) {
-        return jdbcTemplate.queryForList("SELECT employee.fio, employee.phone, position.position FROM position INNER JOIN (employee INNER JOIN artifact ON employee.id = artifact.employee_id) ON position.id = employee.position_id WHERE artifact.id = ?", artifactId);
+        return jdbcTemplate.queryForList("SELECT employee.fio, employee.phone, position.position FROM position INNER JOIN (employee INNER JOIN artifact ON employee.id = artifact.employee_id) ON position.id = employee.position_id WHERE artifact.inv_num = ?", artifactId);
     }
 
     @Override
@@ -237,7 +238,7 @@ public class ArtifactDaoImpl implements ArtifactDao {
 
     @Override
     public List<Map<String, Object>> findMyArtifacts(String name) {
-        return jdbcTemplate.queryForList("SELECT artifact.id, artifact.title, artifact.description, artifact.find_date, " +
+        return jdbcTemplate.queryForList("SELECT artifact.inv_num, artifact.title, artifact.description, artifact.find_date, " +
                 "artifact.sizex, " +
                 "artifact.sizey, " +
                 "artifact.sizez, " +
@@ -263,7 +264,7 @@ public class ArtifactDaoImpl implements ArtifactDao {
     @Override
     public List<Map<String, Object>> fieldInventoryByPeriod(Date from, Date till) {
         return jdbcTemplate.queryForList("SELECT " +
-                "artifact.id, " +
+                "artifact.inv_num, " +
                 "artifact.title, " +
                 "artifact.description, " +
                 "artifact.find_date, " +
@@ -290,7 +291,7 @@ public class ArtifactDaoImpl implements ArtifactDao {
                 "ON region.id = site.region_id) " +
                 "ON layer.id = artifact.layer_id " +
                 "WHERE artifact.find_date between ? and ?" +
-                "ORDER BY artifact.id", from, till);
+                "ORDER BY artifact.inv_num", from, till);
     }
 
     @Override
@@ -301,20 +302,23 @@ public class ArtifactDaoImpl implements ArtifactDao {
                 .collect(Collectors.joining(", "));
 
         return jdbcTemplate.queryForList("SELECT  " +
-                "artifact.id, " +
-                "artifact.title, " +
-                "artifact.description, " +
-                "artifact.find_date, " +
-                "artifact.sizex, " +
-                "artifact.sizey, " +
-                "artifact.sizez, " +
+                "artifact.inv_num, " +
                 "artifact.cipher, " +
+                "material.material, " +
+                "artifact.description, " +
+                "siteobject.siteobject, " +
+                "characteristic.characteristic, " +
+                "artifact.title, " +
+                "square.square, " +
                 "artifact.depth, " +
                 "artifact.coord_north, " +
                 "artifact.coord_west, " +
-                "square.square, " +
-                "material.material, " +
                 "layer.layer, " +
+                "artifact.sizex, " +
+                "artifact.sizey, " +
+                "artifact.sizez, " +
+                "artifact.sizex*artifact.sizey as area, "+
+                "artifact.find_date, " +
                 "site.site_title, " +
                 "region.region " +
                 "FROM layer INNER JOIN " +
@@ -327,9 +331,11 @@ public class ArtifactDaoImpl implements ArtifactDao {
                 "ON site.id = artifact.site_id) " +
                 "ON region.id = site.region_id) " +
                 "ON layer.id = artifact.layer_id " +
+                "LEFT JOIN siteobject ON siteobject.id = artifact.siteobject_id " +
+                "LEFT JOIN characteristic ON characteristic.id = artifact.characteristic_id " +
                 "WHERE (square.square in ( " + listParam + " )) " +
                 "and (artifact.depth between ? and ?) " +
-                "ORDER BY artifact.id", depth_from, depth_till);
+                "ORDER BY artifact.inv_num", depth_from, depth_till);
     }
 
     @Override
@@ -349,7 +355,7 @@ public class ArtifactDaoImpl implements ArtifactDao {
         String listParam = squares.stream()
                 .map(str -> "'" + str + "'")
                 .collect(Collectors.joining(", "));
-        return jdbcTemplate.queryForList("SELECT artifact.id, " +
+        return jdbcTemplate.queryForList("SELECT artifact.inv_num, " +
                 "artifact.sizex, " +
                 "artifact.sizey, " +
                 "artifact.sizez, " +
@@ -420,5 +426,140 @@ public class ArtifactDaoImpl implements ArtifactDao {
     public void saveSiteobject(SiteObject siteobject) {
         jdbcTemplate.update("INSERT INTO siteobject(siteobject) VALUES (?)", siteobject.getSiteobject());
     }
+
+    @Override
+    public Artifact findArtifactById(Integer inv_num) {
+        return jdbcTemplate.queryForObject("SELECT * FROM artifact WHERE artifact.inv_num = ? ORDER BY artifact.id",
+                new BeanPropertyRowMapper<>(Artifact.class),
+                inv_num);
+    }
+
+    @Override
+    public List<Map<String, Object>> fieldInventoryByNumber(Integer inv_num) {
+        return jdbcTemplate.queryForList("SELECT artifact.id, " +
+                        "artifact.inv_num, " +
+                        "artifact.cipher, " +
+                        "material.material, " +
+                        "artifact.description, " +
+                        "siteobject.siteobject, " +
+                        "characteristic.characteristic, " +
+                        "artifact.title, " +
+                        "square.square, " +
+                        "artifact.depth, " +
+                        "artifact.coord_north, " +
+                        "artifact.coord_west, " +
+                        "layer.layer, " +
+                        "artifact.sizex, " +
+                        "artifact.sizey, " +
+                        "artifact.sizez, " +
+                        "artifact.sizex*artifact.sizey as area, "+
+                        "artifact.find_date, " +
+                        "site.site_title " +
+                        "FROM artifact " +
+                        "left join layer on layer.id = artifact.layer_id left join site on site.id = artifact.site_id left join material on material.id = artifact.material_id left join square on square.id = artifact.square_id left join region on region.id = site.region_id left join siteobject on siteobject.id = artifact.siteobject_id left join characteristic on characteristic.id = artifact.characteristic_id "+
+                        "WHERE artifact.inv_num = ?" +
+                        "ORDER BY artifact.id", inv_num);
+    }
+
+    @Override
+    public List<Map<String, Object>> fieldInventoryByCharacteristic(Integer characteristic_id) {
+        return jdbcTemplate.queryForList("SELECT artifact.inv_num, " +
+                "artifact.cipher, " +
+                "material.material, " +
+                "artifact.description, " +
+                "siteobject.siteobject, " +
+                "characteristic.characteristic, " +
+                "artifact.title, " +
+                "square.square, " +
+                "artifact.depth, " +
+                "artifact.coord_north, " +
+                "artifact.coord_west, " +
+                "layer.layer, " +
+                "artifact.sizex, " +
+                "artifact.sizey, " +
+                "artifact.sizez, " +
+                "artifact.sizex*artifact.sizey as area, "+
+                "artifact.find_date, " +
+                "site.site_title " +
+                "FROM artifact " +
+                "left join layer on layer.id = artifact.layer_id left join site on site.id = artifact.site_id left join material on material.id = artifact.material_id left join square on square.id = artifact.square_id left join region on region.id = site.region_id left join siteobject on siteobject.id = artifact.siteobject_id left join characteristic on characteristic.id = artifact.characteristic_id "+
+                "WHERE artifact.characteristic_id = ?" +
+                "ORDER BY artifact.id", characteristic_id);
+    }
+
+    @Override
+    public List<Map<String, Object>> fieldInventoryByObjectAndDepth(Integer siteobject_id, Float from, Float to) {
+        return jdbcTemplate.queryForList("SELECT artifact.inv_num, " +
+                "artifact.cipher, " +
+                "material.material, " +
+                "artifact.description, " +
+                "siteobject.siteobject, " +
+                "characteristic.characteristic, " +
+                "artifact.title, " +
+                "square.square, " +
+                "artifact.depth, " +
+                "artifact.coord_north, " +
+                "artifact.coord_west, " +
+                "layer.layer, " +
+                "artifact.sizex, " +
+                "artifact.sizey, " +
+                "artifact.sizez, " +
+                "artifact.sizex*artifact.sizey as area, "+
+                "artifact.find_date, " +
+                "site.site_title " +
+                "FROM artifact " +
+                "left join layer on layer.id = artifact.layer_id left join site on site.id = artifact.site_id left join material on material.id = artifact.material_id left join square on square.id = artifact.square_id left join region on region.id = site.region_id left join siteobject on siteobject.id = artifact.siteobject_id left join characteristic on characteristic.id = artifact.characteristic_id "+
+                "WHERE (artifact.siteobject_id = ?) and (artifact.depth BETWEEN ? AND ?) " +
+                "ORDER BY artifact.id", siteobject_id, from, to);
+    }
+
+    @Override
+    public void changeArtifact(Artifact artifact){
+        jdbcTemplate.update("UPDATE artifact " +
+                "SET inv_num = ? ," +
+                " title = ? ," +
+                " description = ? ," +
+                " find_date = ? ," +
+                " sizex = ? ," +
+                " sizey = ? ," +
+                " sizez = ? ," +
+                " cipher = ? ," +
+                " depth = ? ," +
+                " coord_north = ? ," +
+                " coord_west = ? ," +
+                " material_id = ? ," +
+                " square_id = ? ," +
+                " layer_id = ? ," +
+                " employee_id = ? ," +
+                " site_id = ? ," +
+                " siteobject_id = ? ," +
+                " characteristic_id = ? " +
+                "WHERE inv_num = ? ",
+                artifact.getInv_num(),
+                artifact.getTitle(),
+                artifact.getDescription(),
+                artifact.getFind_date(),
+                artifact.getSizex(),
+                artifact.getSizey(),
+                artifact.getSizez(),
+                artifact.getCipher(),
+                artifact.getDepth(),
+                artifact.getCoord_north(),
+                artifact.getCoord_west(),
+                artifact.getMaterial_id(),
+                artifact.getSquare_id(),
+                artifact.getLayer_id(),
+                artifact.getEmployee_id(),
+                artifact.getSite_id(),
+                artifact.getSiteobject_id(),
+                artifact.getCharacteristic_id(),
+                artifact.getInv_num());
+    }
+
+    @Override
+    public void deleteArtifact(Long id) {
+        jdbcTemplate.update("DELETE FROM artifact WHERE id = ?", id);
+    }
+
 
 }

@@ -9,6 +9,8 @@ public class Artifact {
 
     private Long id;
 
+    private Integer inv_num;
+
     private String title;
 
     private String description;
@@ -55,6 +57,14 @@ public class Artifact {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Integer getInv_num() {
+        return inv_num;
+    }
+
+    public void setInv_num(Integer inv_num) {
+        this.inv_num = inv_num;
     }
 
     public String getTitle() {

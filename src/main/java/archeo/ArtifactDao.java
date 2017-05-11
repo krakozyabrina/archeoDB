@@ -53,4 +53,16 @@ public interface ArtifactDao {
     List<SiteObject> findAllSiteobjects();
 
     void saveSiteobject(SiteObject siteobject);
+
+    List<Map<String, Object>> fieldInventoryByNumber(Integer inv_num);
+
+    Artifact findArtifactById(Integer inv_num);
+
+    List<Map<String, Object>> fieldInventoryByCharacteristic(Integer characteristic_id);
+
+    List<Map<String, Object>> fieldInventoryByObjectAndDepth(Integer siteobject_id, Float from, Float to);
+
+    void changeArtifact(Artifact artifact);
+
+    void deleteArtifact(Long id);
 }
