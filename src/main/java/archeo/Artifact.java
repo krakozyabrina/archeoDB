@@ -1,5 +1,7 @@
 package archeo;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.util.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -82,22 +84,31 @@ public class Artifact {
     public void setDescription(String description) {
         this.description = description;
     }
-
+/*
     public Date getFind_date() {
         return find_date;
     }
-
-    public String getFindDateStr() {
+*/
+    //@DateTimeFormat(pattern="dd.MMM.YYYY")
+    public Date getFind_date() {
         if (find_date != null) {
-            return SimpleDateFormat.getDateInstance().format(find_date);
+            SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy");
+            String str = format.format(find_date);
+            try {
+                return SimpleDateFormat.getDateInstance().parse(str);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
         }
-        return null;
+        return find_date;
     }
 
-    public void setFindDateStr(String findDateStr) {
+    public void setFind_date_Str(String findDateStr) {
         if (findDateStr != null) {
             try {
                 this.find_date = SimpleDateFormat.getDateInstance().parse(findDateStr);
+                //String str = SimpleDateFormat.getDateInstance().format(findDateStr);
+                //this.find_date = SimpleDateFormat.getDateInstance().parse(str);
             } catch (ParseException e) {
                 // TODO
             }
@@ -243,7 +254,7 @@ public class Artifact {
     public void setCharacteristic_id(Integer characteristic_id) {
         this.characteristic_id = characteristic_id;
     }
-
+/*
     public static Artifact generateRandom() {
         Artifact artifact = new Artifact();
         artifact.setId(1L);
@@ -252,7 +263,7 @@ public class Artifact {
         artifact.setCipher(String.valueOf(new Random().nextInt()));
         return artifact;
     }
-
+*/
     @Override
     public String toString() {
         return "Artifact{" +
