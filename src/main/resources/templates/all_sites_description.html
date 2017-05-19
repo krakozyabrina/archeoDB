@@ -26,6 +26,8 @@
                             <th class="mdl-data-table__cell--non-numeric">Регион</th>
                             <th class="mdl-data-table__cell--non-numeric">Эпоха</th>
                             <th class="mdl-data-table__cell--non-numeric">Комментарии к памятнику</th>
+                            <th class="mdl-data-table__cell--non-numeric">Объект гидросети</th>
+                            <th class="mdl-data-table__cell--non-numeric">Населённый пункт</th>
                         </tr>
                         </thead>
                         <tr th:each="fieldinventory : ${fieldinventories}">
@@ -33,6 +35,8 @@
                             <td class="mdl-data-table__cell--non-numeric" th:text="${fieldinventory.region}"></td>
                             <td class="mdl-data-table__cell--non-numeric" th:text="${fieldinventory.epoch}"></td>
                             <td class="mdl-data-table__cell--non-numeric" th:text="${fieldinventory.site_comments}"></td>
+                            <td class="mdl-data-table__cell--non-numeric" th:text="${fieldinventory.hydroobject}"></td>
+                            <td class="mdl-data-table__cell--non-numeric" th:text="${fieldinventory.settlement}"></td>
                         </tr>
                     </table>
                 </div>

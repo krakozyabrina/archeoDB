@@ -46,7 +46,7 @@ public class Application implements CommandLineRunner {
         jdbcTemplate.execute("CREATE TABLE Layer(id SERIAL, layer VARCHAR(255), CONSTRAINT layer_pkey PRIMARY KEY (id))");
         jdbcTemplate.execute("CREATE TABLE Region(id SERIAL, region VARCHAR(50), CONSTRAINT region_pkey PRIMARY KEY (id))");
         jdbcTemplate.execute("CREATE TABLE Position(id SERIAL, position VARCHAR(50), CONSTRAINT position_pkey PRIMARY KEY (id))");
-        jdbcTemplate.execute("CREATE TABLE Employee(id SERIAL, fio VARCHAR(50), phone integer NOT NULL, position_id integer, FOREIGN KEY ( position_id ) REFERENCES position (id) ON DELETE RESTRICT ON UPDATE CASCADE, CONSTRAINT employee_pkey PRIMARY KEY (id))");
+        jdbcTemplate.execute("CREATE TABLE Employee(id SERIAL, fio VARCHAR(50), phone integer, position_id integer, FOREIGN KEY ( position_id ) REFERENCES position (id) ON DELETE RESTRICT ON UPDATE CASCADE, CONSTRAINT employee_pkey PRIMARY KEY (id))");
         jdbcTemplate.execute("CREATE TABLE Settlement(id SERIAL, settlement VARCHAR(255), CONSTRAINT settlement_pkey PRIMARY KEY (id))");
         jdbcTemplate.execute("CREATE TABLE Hydroobject(id SERIAL, hydroobject VARCHAR(255), CONSTRAINT hydroobject_pkey PRIMARY KEY (id))");
         jdbcTemplate.execute("CREATE TABLE Characteristic(id SERIAL, characteristic VARCHAR(255), CONSTRAINT characteristic_pkey PRIMARY KEY (id))");

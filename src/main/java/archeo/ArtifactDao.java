@@ -65,4 +65,6 @@ public interface ArtifactDao {
     void changeArtifact(Artifact artifact);
 
     void deleteArtifact(Long id);
+
+    List<Employees> findEmployees();
 }

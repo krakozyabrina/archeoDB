@@ -132,6 +132,21 @@ public class ArtifactDaoImpl implements ArtifactDao {
     }
 
     @Override
+    public List<Employees> findEmployees() {
+        return jdbcTemplate.query("select e.id, e.fio, e.phone, p.position " +
+                "from employee e " +
+                "left join position p on e.position_id = p.id", (resultSet, rowNum) -> {
+            Employees em = new Employees();
+            em.setId(resultSet.getInt("id"));
+            em.setFio(resultSet.getString("fio"));
+            em.setPhone(resultSet.getInt("phone"));
+            em.setPosition(resultSet.getString("position"));
+            return em;
+        });
+    }
+
+
+    @Override
     public List<Employee> findAllEmployees(){
         return jdbcTemplate.query("select * from employee", (resultSet, rowNum) -> {
             Employee e = new Employee();
@@ -343,11 +358,15 @@ public class ArtifactDaoImpl implements ArtifactDao {
         return jdbcTemplate.queryForList("SELECT site.site_title, " +
                 "region.region, " +
                 "epoch.epoch, " +
-                "site.site_comments " +
+                "site.site_comments, " +
+                "hydroobject.hydroobject, " +
+                "settlement.settlement " +
                 "FROM epoch INNER JOIN " +
                 "(region INNER JOIN site " +
                 "ON region.id = site.region_id) " +
-                "ON epoch.id = site.epoch_id");
+                "ON epoch.id = site.epoch_id " +
+                "LEFT JOIN hydroobject ON hydroobject.id = site.hydroobject_id " +
+                "LEFT JOIN settlement ON settlement.id = site.settlement_id");
     }
 
     @Override

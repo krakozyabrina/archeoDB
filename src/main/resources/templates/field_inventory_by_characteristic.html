@@ -74,7 +74,7 @@
                             <td class="mdl-data-table__cell--non-numeric" th:text="${fieldinventory.sizey}"></td>
                             <td class="mdl-data-table__cell--non-numeric" th:text="${fieldinventory.sizez}"></td>
                             <td class="mdl-data-table__cell--non-numeric" th:text="${fieldinventory.area}"></td>
-                            <td class="mdl-data-table__cell--non-numeric" th:text="${fieldinventory.find_date}"></td>
+                            <td class="mdl-data-table__cell--non-numeric" th:text="${#dates.format(fieldinventory.find_date, 'dd.MM.yyyy')}"></td>
                             <td class="mdl-data-table__cell--non-numeric" th:text="${fieldinventory.site_title}"></td>
                         </tr>
                     </table>

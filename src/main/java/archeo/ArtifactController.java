@@ -23,6 +23,7 @@ import java.util.Map;
         SizeOfArtifactsBySquareAndDepth.class,
         FieldInventoryByCharacteristic.class,
         FieldInventoryByObjectAndDepth.class,
+        ArtifactsBySquaresAndDepth.class,
         FieldInventoryByNumber.class})
 public class ArtifactController {
 
@@ -311,6 +312,8 @@ public class ArtifactController {
         mv.setViewName("addemployee");
         mv.addObject("employee", employee);
         mv.addObject("employees", artifactDao.findAllEmployees());
+        mv.addObject("positions", artifactDao.findAllPositions());
+        mv.addObject("employs", artifactDao.findEmployees());
         mv.addObject("title","Добавить сотрудника");
 
         return mv;
@@ -325,6 +328,8 @@ public class ArtifactController {
         mv.setViewName("addemployee");
         mv.addObject("employee", employee);
         mv.addObject("employees", artifactDao.findAllEmployees());
+        mv.addObject("positions", artifactDao.findAllPositions());
+        mv.addObject("employs", artifactDao.findEmployees());
         mv.addObject("title","Добавить сотрудника");
 
         return mv;

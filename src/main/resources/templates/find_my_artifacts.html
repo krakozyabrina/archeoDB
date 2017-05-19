@@ -66,7 +66,7 @@
                             <td th:text="${fieldinventory.inv_num}"></td>
                             <td class="mdl-data-table__cell--non-numeric" th:text="${fieldinventory.title}"></td>
                             <td class="mdl-data-table__cell--non-numeric" th:text="${fieldinventory.description}"></td>
-                            <td class="mdl-data-table__cell--non-numeric" th:text="${fieldinventory.find_date}"></td>
+                            <td class="mdl-data-table__cell--non-numeric" th:text="${#dates.format(fieldinventory.find_date, 'dd.MM.yyyy')}"></td>
                             <td class="mdl-data-table__cell--non-numeric" th:text="${fieldinventory.sizex}"></td>
                             <td class="mdl-data-table__cell--non-numeric" th:text="${fieldinventory.sizey}"></td>
                             <td class="mdl-data-table__cell--non-numeric" th:text="${fieldinventory.sizez}"></td>

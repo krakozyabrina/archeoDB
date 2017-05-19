@@ -1,5 +1,6 @@
 <!doctype html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <head th:replace="fragments/base :: common_header"></head>
 <body>
 <div class="demo-layout mdl-layout mdl-js-layout mdl-layout--fixed-drawer mdl-layout--fixed-header">
@@ -83,11 +84,11 @@
                             <td class="mdl-data-table__cell--non-numeric" th:text="${fieldinventory.area}"></td>
                             <td class="mdl-data-table__cell--non-numeric" th:text="${#dates.format(fieldinventory.find_date, 'dd.MM.yyyy')}"></td>
                             <td class="mdl-data-table__cell--non-numeric" th:text="${fieldinventory.site_title}"></td>
-                            <td class="mdl-data-table__cell--non-numeric">
+                            <td sec:authorize="hasRole('ROLE_ADMIN')" class="mdl-data-table__cell--non-numeric">
                                 <a class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon" th:href="@{/field_inventory_by_number_change(id=${fieldinventory.inv_num})}">
                                     <i class="material-icons">create</i>
                                 </a>
-                                <a class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon" th:href="@{/field_inventory_by_number_remove(id=${fieldinventory.id})}">
+                                <a class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon" th:href="@{/field_inventory_by_number_remove(id=${fieldinventory.inv_num})}">
                                     <i class="material-icons">clear</i>
                                 </a>
                             </td>

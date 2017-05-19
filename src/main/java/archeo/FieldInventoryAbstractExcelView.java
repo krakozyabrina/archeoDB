@@ -30,7 +30,7 @@ public class FieldInventoryAbstractExcelView extends AbstractXlsView {
                                       HttpServletRequest httpServletRequest,
                                       HttpServletResponse httpServletResponse) throws Exception {
 
-
+        httpServletResponse.setHeader("Content-Disposition", "inline; filename=fieldInventoryBySquaresAndDepth.xls");
         Sheet sheet = workbook.createSheet("Опись предметов по заданным квадратам и глубине");
 
         Row header = sheet.createRow(0);

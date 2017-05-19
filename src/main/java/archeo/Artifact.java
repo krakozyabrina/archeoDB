@@ -17,6 +17,7 @@ public class Artifact {
 
     private String description;
 
+    @DateTimeFormat(pattern = "dd.MM.yyyy")
     private Date find_date;
 
     private Float sizex;
@@ -84,12 +85,11 @@ public class Artifact {
     public void setDescription(String description) {
         this.description = description;
     }
-/*
+
     public Date getFind_date() {
         return find_date;
     }
-*/
-    //@DateTimeFormat(pattern="dd.MMM.YYYY")
+/*
     public Date getFind_date() {
         if (find_date != null) {
             SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy");
@@ -103,7 +103,7 @@ public class Artifact {
         return find_date;
     }
 
-    public void setFind_date_Str(String findDateStr) {
+    public void setFind_date(String findDateStr) {
         if (findDateStr != null) {
             try {
                 this.find_date = SimpleDateFormat.getDateInstance().parse(findDateStr);
@@ -114,7 +114,7 @@ public class Artifact {
             }
         }
     }
-
+*/
     public void setFind_date(Date find_date) {
         this.find_date = find_date;
     }
