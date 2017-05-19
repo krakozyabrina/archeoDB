@@ -26,6 +26,7 @@ public class FieldInventoryByNumberAEV extends AbstractXlsView {
                                       Workbook workbook,
                                       HttpServletRequest httpServletRequest,
                                       HttpServletResponse httpServletResponse) throws Exception {
+        httpServletResponse.setHeader("Content-Disposition", "inline; filename=fieldInventoryByNumber.xls");
         Sheet sheet = workbook.createSheet("Опись предметов по номеру в описи");
 
         Row header = sheet.createRow(0);

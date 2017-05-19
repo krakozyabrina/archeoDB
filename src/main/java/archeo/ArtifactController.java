@@ -40,6 +40,15 @@ public class ArtifactController {
         return mv;
     }
 
+    @GetMapping("/index")
+    public ModelAndView index() {
+
+        ModelAndView mv = new ModelAndView();
+        mv.setViewName("index");
+        mv.addObject("title", "ArcheoDB");
+        return mv;
+    }
+
     @GetMapping("/")
     public ModelAndView home() {
 

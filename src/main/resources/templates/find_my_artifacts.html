@@ -63,7 +63,7 @@
                         </tr>
                         </thead>
                         <tr th:each="fieldinventory : ${fieldinventories}">
-                            <td th:text="${fieldinventory.id}"></td>
+                            <td th:text="${fieldinventory.inv_num}"></td>
                             <td class="mdl-data-table__cell--non-numeric" th:text="${fieldinventory.title}"></td>
                             <td class="mdl-data-table__cell--non-numeric" th:text="${fieldinventory.description}"></td>
                             <td class="mdl-data-table__cell--non-numeric" th:text="${fieldinventory.find_date}"></td>

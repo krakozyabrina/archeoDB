@@ -30,16 +30,16 @@ public class SizeOfArtifactsBySquareAndDepthAEV extends AbstractXlsView {
                                       HttpServletRequest httpServletRequest,
                                       HttpServletResponse httpServletResponse) throws Exception {
 
-
+        httpServletResponse.setHeader("Content-Disposition", "inline; filename=sizeOfArtifactsBySquareAndDepth.xls");
         Sheet sheet = workbook.createSheet("Размеры фрагментов по квадрату и глубине");
 
         Row header = sheet.createRow(0);
         header.createCell(0).setCellValue("Номер в описи");
-        header.createCell(4).setCellValue("Размер_X");
-        header.createCell(5).setCellValue("Размер_Y");
-        header.createCell(6).setCellValue("Размер_Z");
-        header.createCell(7).setCellValue("Квадрат");
-        header.createCell(8).setCellValue("Глубина(см)");
+        header.createCell(1).setCellValue("Размер_X");
+        header.createCell(2).setCellValue("Размер_Y");
+        header.createCell(3).setCellValue("Размер_Z");
+        header.createCell(4).setCellValue("Квадрат");
+        header.createCell(5).setCellValue("Глубина(см)");
 
         int rowNum = 1;
         for (Map<String, Object> fields : objects) {

@@ -21,7 +21,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/assets/**").permitAll()
+                .antMatchers("/assets/**", "/index", "/about").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin().loginPage("/login").permitAll()
@@ -31,20 +31,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        //DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
-        //authenticationProvider.setPasswordEncoder(passwordEncoder());
-        //authenticationProvider.setUserDetailsService(userDetailsService());
-        //authenticationProvider.setSaltSource(saltSource);
 
         auth
                 .inMemoryAuthentication()
-                .withUser("user").password("password").roles("USER");
-        auth
-                .inMemoryAuthentication()
-                .withUser("admin").password("admin_password").roles("ADMIN");
+                .withUser("user").password("password").roles("USER")
+                .and()
+                .withUser("admin").password("admin_password").roles("USER", "ADMIN", "SCIENTIST")
+                .and()
+                .withUser("scientist").password("scientist_password").roles("SCIENTIST");
     }
 
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
 }

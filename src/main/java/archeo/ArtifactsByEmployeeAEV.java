@@ -30,7 +30,7 @@ public class ArtifactsByEmployeeAEV extends AbstractXlsView {
                                       HttpServletRequest httpServletRequest,
                                       HttpServletResponse httpServletResponse) throws Exception {
 
-
+        httpServletResponse.setHeader("Content-Disposition", "inline; filename=artifactsByEmployee.xls");
         Sheet sheet = workbook.createSheet("Количество находок по сотрудникам");
 
         Row header = sheet.createRow(0);

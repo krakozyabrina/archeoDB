@@ -1,0 +1,64 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/base :: common_header"></head>
+<body>
+<div class="demo-layout mdl-layout mdl-js-layout mdl-layout--fixed-drawer mdl-layout--fixed-header">
+
+    <div th:replace="fragments/header :: header"></div>
+    <div th:replace="fragments/nav :: nav"></div>
+
+    <main class="mdl-layout__content mdl-color--grey-100">
+        <div class="mdl-grid demo-content">
+
+            <div class="demo-cards mdl-cell mdl-cell--6-col mdl-grid mdl-grid--no-spacing">
+
+                <div class="demo-cards mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--12-col">
+                    <div class="mdl-card__title mdl-color--teal-300">
+                        <h2 class="mdl-card__title-text">Объект гидросети</h2>
+                    </div>
+                    <div class="mdl-card__supporting-text mdl-color-text--grey-600">
+                        <form action="#" th:action="@{/addhydroobject}" th:object="${hydroobject}" method="post">
+                            <p>
+                            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                <input id="a_hydroobject" class="mdl-textfield__input" type="text" th:field="*{hydroobject}"/>
+                                <label class="mdl-textfield__label" for="a_hydroobject">Название объекта гидросети</label>
+                            </div>
+                            </p>
+                            <p>
+                                <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--primary"
+                                        type="submit">
+                                    Сохранить
+                                </button>
+                                <button class="mdl-button mdl-js-button mdl-button--raised" type="reset">
+                                    Отменить
+                                </button>
+                            </p>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="demo-cards mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--6-col">
+                <div class="mdl-card__title mdl-color--teal-300">
+                    <h2 class="mdl-card__title-text">Все объекты в таблице</h2>
+                </div>
+                <div class="mdl-color-text--grey-600 big-table">
+                    <table class="mdl-data-table mdl-js-data-table">
+                        <thead>
+                        <tr>
+                            <th>Идентификатор</th>
+                            <th class="mdl-data-table__cell--non-numeric">Название</th>
+                        </tr>
+                        </thead>
+                        <tr th:each="hydroobject : ${hydroobjects}">
+                            <td th:text="${hydroobject.id}"></td>
+                            <td class="mdl-data-table__cell--non-numeric" th:text="${hydroobject.hydroobject}"></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+</body>
+</html>

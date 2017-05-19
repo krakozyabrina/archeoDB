@@ -30,7 +30,7 @@ public class CountArtifactsBySquaresOnDepthAEV extends AbstractXlsView {
                                       HttpServletRequest httpServletRequest,
                                       HttpServletResponse httpServletResponse) throws Exception {
 
-
+        httpServletResponse.setHeader("Content-Disposition", "inline; filename=countArtifactsBySquaresOnDepth.xls");
         Sheet sheet = workbook.createSheet("Количество находок по квадратам на заданной глубине");
 
         Row header = sheet.createRow(0);

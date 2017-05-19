@@ -30,7 +30,7 @@ public class AllSitesAEV  extends AbstractXlsView {
                                       HttpServletRequest httpServletRequest,
                                       HttpServletResponse httpServletResponse) throws Exception {
 
-
+        httpServletResponse.setHeader("Content-Disposition", "inline; filename=allsites.xls");
         Sheet sheet = workbook.createSheet("Полное описание памятников");
 
         Row header = sheet.createRow(0);

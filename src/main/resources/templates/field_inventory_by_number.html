@@ -12,12 +12,12 @@
 
             <div class="demo-cards mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--12-col">
                 <div class="mdl-card__title mdl-color--teal-300">
-                    <h2 class="mdl-card__title-text">Опись находок по заданным дням</h2>
+                    <h2 class="mdl-card__title-text">Опись предметов по номеру в описи</h2>
                     <div class="mdl-layout-spacer"></div>
                     <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon" id="show-dialog">
                         <i class="material-icons">filter_list</i>
                     </button>
-                    <a class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon" th:href="@{/find_artifacts_by_days_export}">
+                    <a class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon" th:href="@{/field_inventory_by_number_export}">
                         <i class="material-icons">file_download</i>
                     </a>
                 </div>
@@ -25,10 +25,7 @@
 
                     <div class="params" th:unless="${error}">
                         <div>
-                            <b>Начало периода: </b><span th:text="${{artifactsByDays.from}}"></span>
-                        </div>
-                        <div>
-                            <b>Конец периода: </b><span th:text="${{artifactsByDays.till}}"></span>
+                            <b>Номер в описи: </b><span th:text="${{fieldInventoryByNumber.inv_num}}"></span>
                         </div>
                     </div>
 
@@ -47,40 +44,53 @@
                         <thead>
                         <tr>
                             <th>Номер в описи</th>
-                            <th class="mdl-data-table__cell--non-numeric">Предмет</th>
-                            <th class="mdl-data-table__cell--non-numeric">Описание</th>
-                            <th class="mdl-data-table__cell--non-numeric">Дата находки</th>
-                            <th class="mdl-data-table__cell--non-numeric">Размер_X</th>
-                            <th class="mdl-data-table__cell--non-numeric">Размер_Y</th>
-                            <th class="mdl-data-table__cell--non-numeric">Размер_Z</th>
                             <th class="mdl-data-table__cell--non-numeric">Шифр</th>
+                            <th class="mdl-data-table__cell--non-numeric">Материал</th>
+                            <th class="mdl-data-table__cell--non-numeric">Описание</th>
+                            <th class="mdl-data-table__cell--non-numeric">Объект</th>
+                            <th class="mdl-data-table__cell--non-numeric">Характеристика</th>
+                            <th class="mdl-data-table__cell--non-numeric">Предмет</th>
+                            <th class="mdl-data-table__cell--non-numeric">Квадрат</th>
                             <th class="mdl-data-table__cell--non-numeric">Глубина(см)</th>
                             <th class="mdl-data-table__cell--non-numeric">Коорд_Север</th>
                             <th class="mdl-data-table__cell--non-numeric">Коорд_Запад</th>
-                            <th class="mdl-data-table__cell--non-numeric">Квадрат</th>
-                            <th class="mdl-data-table__cell--non-numeric">Материал</th>
                             <th class="mdl-data-table__cell--non-numeric">Слой</th>
+                            <th class="mdl-data-table__cell--non-numeric">Размер_X</th>
+                            <th class="mdl-data-table__cell--non-numeric">Размер_Y</th>
+                            <th class="mdl-data-table__cell--non-numeric">Размер_Z</th>
+                            <th class="mdl-data-table__cell--non-numeric">Площадь находки</th>
+                            <th class="mdl-data-table__cell--non-numeric">Дата находки</th>
                             <th class="mdl-data-table__cell--non-numeric">Памятник</th>
-                            <th class="mdl-data-table__cell--non-numeric">Регион</th>
+                            <th class="mdl-data-table__cell--non-numeric"></th>
                         </tr>
                         </thead>
                         <tr th:each="fieldinventory : ${fieldinventories}">
                             <td th:text="${fieldinventory.inv_num}"></td>
-                            <td class="mdl-data-table__cell--non-numeric" th:text="${fieldinventory.title}"></td>
-                            <td class="mdl-data-table__cell--non-numeric" th:text="${fieldinventory.description}"></td>
-                            <td class="mdl-data-table__cell--non-numeric" th:text="${#dates.format(fieldinventory.find_date, 'dd.MM.yyyy')}"></td>
-                            <td class="mdl-data-table__cell--non-numeric" th:text="${fieldinventory.sizex}"></td>
-                            <td class="mdl-data-table__cell--non-numeric" th:text="${fieldinventory.sizey}"></td>
-                            <td class="mdl-data-table__cell--non-numeric" th:text="${fieldinventory.sizez}"></td>
                             <td class="mdl-data-table__cell--non-numeric" th:text="${fieldinventory.cipher}"></td>
+                            <td class="mdl-data-table__cell--non-numeric" th:text="${fieldinventory.material}"></td>
+                            <td class="mdl-data-table__cell--non-numeric" th:text="${fieldinventory.description}"></td>
+                            <td class="mdl-data-table__cell--non-numeric" th:text="${fieldinventory.siteobject}"></td>
+                            <td class="mdl-data-table__cell--non-numeric" th:text="${fieldinventory.characteristic}"></td>
+                            <td class="mdl-data-table__cell--non-numeric" th:text="${fieldinventory.title}"></td>
+                            <td class="mdl-data-table__cell--non-numeric" th:text="${fieldinventory.square}"></td>
                             <td class="mdl-data-table__cell--non-numeric" th:text="${fieldinventory.depth}"></td>
                             <td class="mdl-data-table__cell--non-numeric" th:text="${fieldinventory.coord_north}"></td>
                             <td class="mdl-data-table__cell--non-numeric" th:text="${fieldinventory.coord_west}"></td>
-                            <td class="mdl-data-table__cell--non-numeric" th:text="${fieldinventory.square}"></td>
-                            <td class="mdl-data-table__cell--non-numeric" th:text="${fieldinventory.material}"></td>
                             <td class="mdl-data-table__cell--non-numeric" th:text="${fieldinventory.layer}"></td>
+                            <td class="mdl-data-table__cell--non-numeric" th:text="${fieldinventory.sizex}"></td>
+                            <td class="mdl-data-table__cell--non-numeric" th:text="${fieldinventory.sizey}"></td>
+                            <td class="mdl-data-table__cell--non-numeric" th:text="${fieldinventory.sizez}"></td>
+                            <td class="mdl-data-table__cell--non-numeric" th:text="${fieldinventory.area}"></td>
+                            <td class="mdl-data-table__cell--non-numeric" th:text="${#dates.format(fieldinventory.find_date, 'dd.MM.yyyy')}"></td>
                             <td class="mdl-data-table__cell--non-numeric" th:text="${fieldinventory.site_title}"></td>
-                            <td class="mdl-data-table__cell--non-numeric" th:text="${fieldinventory.region}"></td>
+                            <td class="mdl-data-table__cell--non-numeric">
+                                <a class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon" th:href="@{/field_inventory_by_number_change(id=${fieldinventory.inv_num})}">
+                                    <i class="material-icons">create</i>
+                                </a>
+                                <a class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon" th:href="@{/field_inventory_by_number_remove(id=${fieldinventory.id})}">
+                                    <i class="material-icons">clear</i>
+                                </a>
+                            </td>
                         </tr>
                     </table>
                 </div>
@@ -93,20 +103,14 @@
     <h4 class="mdl-dialog__title">Параметры</h4>
     <div class="mdl-dialog__content">
         <p>
-            Введите параметры.
+            Укажите параметры
         </p>
         <div>
-            <form id="search_form" th:action="@{/find_artifacts_by_days}" th:object="${artifactsByDays}" method="post">
+            <form id="search_form" th:action="@{/field_inventory_by_number}" th:object="${fieldInventoryByNumber}" method="post">
                 <p>
                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                    <input id="a_from2" class="mdl-textfield__input" type="text" th:field="*{from}"/>
-                    <label class="mdl-textfield__label" for="a_from2">Начало периода</label>
-                </div>
-                </p>
-                <p>
-                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                    <input id="a_till2" class="mdl-textfield__input" type="text" th:field="*{till}"/>
-                    <label class="mdl-textfield__label" for="a_till2">Конец периода</label>
+                    <input id="a_inv_num" class="mdl-textfield__input" type="text" th:field="*{inv_num}"/>
+                    <label class="mdl-textfield__label" for="a_inv_num">Номер в описи</label>
                 </div>
                 </p>
             </form>

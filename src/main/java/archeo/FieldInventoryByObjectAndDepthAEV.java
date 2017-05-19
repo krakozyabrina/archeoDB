@@ -29,6 +29,7 @@ public class FieldInventoryByObjectAndDepthAEV extends AbstractXlsView {
                                       Workbook workbook,
                                       HttpServletRequest httpServletRequest,
                                       HttpServletResponse httpServletResponse) throws Exception {
+        httpServletResponse.setHeader("Content-Disposition", "inline; filename=fieldInventoryByObjectAndDepth.xls");
         Sheet sheet = workbook.createSheet("Опись предметов по объекту и глубине");
 
         Row header = sheet.createRow(0);

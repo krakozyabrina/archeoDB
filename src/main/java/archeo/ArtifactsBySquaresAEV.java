@@ -31,7 +31,7 @@ public class ArtifactsBySquaresAEV extends AbstractXlsView {
                                       HttpServletRequest httpServletRequest,
                                       HttpServletResponse httpServletResponse) throws Exception {
 
-
+        httpServletResponse.setHeader("Content-Disposition", "inline; filename=artifactsBySquares.xls");
         Sheet sheet = workbook.createSheet("Общее количество находок по квадратам");
 
         Row header = sheet.createRow(0);

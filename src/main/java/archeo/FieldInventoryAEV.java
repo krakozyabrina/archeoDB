@@ -26,6 +26,7 @@ public class FieldInventoryAEV extends AbstractXlsView {
         CellStyle dateCellStyle = workbook.createCellStyle();
         DataFormat dataFormat = workbook.createDataFormat();
         dateCellStyle.setDataFormat(dataFormat.getFormat("DD.MM.YY"));
+        httpServletResponse.setHeader("Content-Disposition", "inline; filename=fieldinventory.xls");
 
         Row header = sheet.createRow(0);
         header.createCell(0).setCellValue("Номер в описи");
@@ -51,7 +52,7 @@ public class FieldInventoryAEV extends AbstractXlsView {
         int rowNum = 1;
         for (Fieldinventory fieldinventory : this.fieldinventories) {
             Row row = sheet.createRow(rowNum++);
-            row.createCell(0).setCellValue(fieldinventory.getId());
+            row.createCell(0).setCellValue(fieldinventory.getInv_num());
             row.createCell(1).setCellValue(fieldinventory.getCipher());
             row.createCell(2).setCellValue(fieldinventory.getMaterial());
             row.createCell(3).setCellValue(fieldinventory.getDescription());

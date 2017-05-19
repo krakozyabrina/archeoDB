@@ -31,7 +31,7 @@ public class ArtifactsByMaterialAEV extends AbstractXlsView {
                                       HttpServletRequest httpServletRequest,
                                       HttpServletResponse httpServletResponse) throws Exception {
 
-
+        httpServletResponse.setHeader("Content-Disposition", "inline; filename=artifactsByMaterial.xls");
         Sheet sheet = workbook.createSheet("Количество находок по материалам");
 
         Row header = sheet.createRow(0);

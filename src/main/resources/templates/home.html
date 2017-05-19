@@ -18,7 +18,7 @@
                 </div>
                 <div class="mdl-card__supporting-text mdl-color-text--grey-600">
                     <ul>
-                        <li class="mdl-navigation__link"><a href="/addArtifact"><i class="icon-fix material-icons">local_library</i>Добавить находки в базу</a></li>
+                        <li sec:authorize="hasRole('ROLE_USER')" class="mdl-navigation__link"><a href="/addArtifact"><i class="icon-fix material-icons">local_library</i>Добавить находки в базу</a></li>
                         <li sec:authorize="hasRole('ROLE_ADMIN')" class="mdl-navigation__link"><a href="/addmaterial"><i class="icon-fix material-icons">local_library</i>Добавить материал</a></li>
                         <li sec:authorize="hasRole('ROLE_ADMIN')" class="mdl-navigation__link"><a href="/addsquare"><i class="icon-fix material-icons">local_library</i>Добавить квадрат</a></li>
                         <li sec:authorize="hasRole('ROLE_ADMIN')" class="mdl-navigation__link"><a href="/addepoch"><i class="icon-fix material-icons">local_library</i>Добавить эпоху</a></li>
@@ -27,6 +27,10 @@
                         <li sec:authorize="hasRole('ROLE_ADMIN')" class="mdl-navigation__link"><a href="/addposition"><i class="icon-fix material-icons">local_library</i>Добавить должность</a></li>
                         <li sec:authorize="hasRole('ROLE_ADMIN')" class="mdl-navigation__link"><a href="/addemployee"><i class="icon-fix material-icons">local_library</i>Добавить сотрудника</a></li>
                         <li sec:authorize="hasRole('ROLE_ADMIN')" class="mdl-navigation__link"><a href="/addsite"><i class="icon-fix material-icons">local_library</i>Добавить памятник</a></li>
+                        <li sec:authorize="hasRole('ROLE_ADMIN')" class="mdl-navigation__link"><a href="/addcharacteristic"><i class="icon-fix material-icons">local_library</i>Добавить характеристику</a></li>
+                        <li sec:authorize="hasRole('ROLE_ADMIN')" class="mdl-navigation__link"><a href="/addhydroobject"><i class="icon-fix material-icons">local_library</i>Добавить объект гидросети</a></li>
+                        <li sec:authorize="hasRole('ROLE_ADMIN')" class="mdl-navigation__link"><a href="/addsettlement"><i class="icon-fix material-icons">local_library</i>Добавить населённый пункт</a></li>
+                        <li sec:authorize="hasRole('ROLE_ADMIN')" class="mdl-navigation__link"><a href="/addsiteobject"><i class="icon-fix material-icons">local_library</i>Добавить объект на памятнике</a></li>
                     </ul>
                 </div>
 
@@ -39,18 +43,21 @@
                 </div>
                 <div class="mdl-card__supporting-text mdl-color-text--grey-600">
                     <ul>
-                        <li class="mdl-navigation__link"><a href="/fieldinventory"><i class="icon-fix material-icons">description</i>Полевая опись</a></li>
-                        <li class="mdl-navigation__link"><a href="/count_artifacts_by_squares_on_depth"><i class="icon-fix material-icons">description</i>Количество находок по квадратам на заданной
+                        <li sec:authorize="hasRole('ROLE_SCIENTIST')" class="mdl-navigation__link"><a href="/fieldinventory"><i class="icon-fix material-icons">description</i>Полевая опись</a></li>
+                        <li sec:authorize="hasRole('ROLE_SCIENTIST')" class="mdl-navigation__link"><a href="/count_artifacts_by_squares_on_depth"><i class="icon-fix material-icons">description</i>Количество находок по квадратам на заданной
                             глубине</a></li>
-                        <li class="mdl-navigation__link"><a href="/count_artifacts_by_material"><i class="icon-fix material-icons">description</i>Количество находок по материалам</a></li>
-                        <li class="mdl-navigation__link"><a href="/count_artifacts_by_employee"><i class="icon-fix material-icons">description</i>Количество находок по сотрудникам</a></li>
-                        <li class="mdl-navigation__link"><a href="/count_artifacts_by_squares"><i class="icon-fix material-icons">description</i>Количество находок по квадратам</a></li>
-                        <li class="mdl-navigation__link"><a href="/find_artifacts_by_days"><i class="icon-fix material-icons">description</i>Опись находок по заданным дням</a></li>
-                        <li class="mdl-navigation__link"><a href="/field_inventory_by_squares_and_depth"><i class="icon-fix material-icons">description</i>Опись предметов по заданным квадратам и глубине</a></li>
-                        <li class="mdl-navigation__link"><a href="/all_sites_description"><i class="icon-fix material-icons">description</i>Полное описание памятников</a></li>
-                        <li class="mdl-navigation__link"><a href="/size_of_artifacts_by_square_and_depth"><i class="icon-fix material-icons">description</i>Размеры фрагментов по квадрату и глубине</a></li>
-                        <li class="mdl-navigation__link"><a href="/find_my_artifacts"><i class="icon-fix material-icons">search</i>Мои находки</a></li>
-                        <li class="mdl-navigation__link"><a href="/find_employee_by_artifact_id"><i class="icon-fix material-icons">search</i>Найти сотрудника по номеру находки</a></li>
+                        <li sec:authorize="hasRole('ROLE_SCIENTIST')" class="mdl-navigation__link"><a href="/count_artifacts_by_material"><i class="icon-fix material-icons">description</i>Количество находок по материалам</a></li>
+                        <li sec:authorize="hasRole('ROLE_SCIENTIST')" class="mdl-navigation__link"><a href="/count_artifacts_by_employee"><i class="icon-fix material-icons">description</i>Количество находок по сотрудникам</a></li>
+                        <li sec:authorize="hasRole('ROLE_SCIENTIST')" class="mdl-navigation__link"><a href="/count_artifacts_by_squares"><i class="icon-fix material-icons">description</i>Количество находок по квадратам</a></li>
+                        <li sec:authorize="hasRole('ROLE_SCIENTIST')" class="mdl-navigation__link"><a href="/find_artifacts_by_days"><i class="icon-fix material-icons">description</i>Опись находок по заданным дням</a></li>
+                        <li sec:authorize="hasRole('ROLE_SCIENTIST')" class="mdl-navigation__link"><a href="/field_inventory_by_squares_and_depth"><i class="icon-fix material-icons">description</i>Опись предметов по заданным квадратам и глубине</a></li>
+                        <li sec:authorize="hasRole('ROLE_SCIENTIST')" class="mdl-navigation__link"><a href="/field_inventory_by_characteristic"><i class="icon-fix material-icons">description</i>Опись предметов по характеристике</a></li>
+                        <li sec:authorize="hasRole('ROLE_SCIENTIST')" class="mdl-navigation__link"><a href="/field_inventory_by_number"><i class="icon-fix material-icons">description</i>Опись предметов по номеру</a></li>
+                        <li sec:authorize="hasRole('ROLE_SCIENTIST')" class="mdl-navigation__link"><a href="/field_inventory_by_object_and_depth"><i class="icon-fix material-icons">description</i>Опись предметов по объекту и глубине</a></li>
+                        <li sec:authorize="hasRole('ROLE_SCIENTIST')" class="mdl-navigation__link"><a href="/all_sites_description"><i class="icon-fix material-icons">description</i>Полное описание памятников</a></li>
+                        <li sec:authorize="hasRole('ROLE_SCIENTIST')" class="mdl-navigation__link"><a href="/size_of_artifacts_by_square_and_depth"><i class="icon-fix material-icons">description</i>Размеры фрагментов по квадрату и глубине</a></li>
+                        <li sec:authorize="hasRole('ROLE_SCIENTIST')" class="mdl-navigation__link"><a href="/find_my_artifacts"><i class="icon-fix material-icons">search</i>Мои находки</a></li>
+                        <li sec:authorize="hasRole('ROLE_SCIENTIST')" class="mdl-navigation__link"><a href="/find_employee_by_artifact_id"><i class="icon-fix material-icons">search</i>Найти сотрудника по номеру находки</a></li>
                     </ul>
                 </div>
             </div>

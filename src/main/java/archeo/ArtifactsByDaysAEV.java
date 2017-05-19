@@ -31,7 +31,7 @@ public class ArtifactsByDaysAEV extends AbstractXlsView {
                                       HttpServletRequest httpServletRequest,
                                       HttpServletResponse httpServletResponse) throws Exception {
 
-
+        httpServletResponse.setHeader("Content-Disposition", "inline; filename=artifactByDays.xls");
         Sheet sheet = workbook.createSheet("Опись находок по заданным дням");
 
         Row header = sheet.createRow(0);

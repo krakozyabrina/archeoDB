@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+      xmlns="http://www.w3.org/1999/xhtml">
+<head th:replace="fragments/base :: common_header"></head>
+<body>
+<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+    <main class="mdl-layout__content">
+        <div class="page-content">
+
+            <div class="mdl-card mdl-card-login mdl-shadow--8dp">
+                <div class="mdl-card__title mdl-card--expand">
+                    <h4 class="mdl-card__title-text">Информационная система ArcheoDB</h4>
+                </div>
+                <div class="mdl-card__media">
+                    <img src="assets/images/index_425.png"/>
+                </div>
+                <div class="mdl-card__supporting-text">
+                    <p>Разработчик: Рыбасова А.Р.</p>
+                    <p>Для ПНИАЛ УрФУ</p>
+                </div>
+                <div class="mdl-card__actions mdl-card--border">
+                    <a class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--raised" th:href="@{/about}">
+                        О системе
+                    </a>
+                    <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--primary mdl-js-ripple-effect" th:href="@{/}">
+                        Войти
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+</body>
+</html>

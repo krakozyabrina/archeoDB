@@ -20,8 +20,8 @@
                         <form action="#" th:action="@{/addArtifact}" th:object="${artifact}" method="post">
                             <p>
                             <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                <input id="a_id" class="mdl-textfield__input" type="number" th:field="*{id}"/>
-                                <label class="mdl-textfield__label" for="a_id">Номер в описи</label>
+                                <input id="a_inv_num" class="mdl-textfield__input" type="number" th:field="*{inv_num}"/>
+                                <label class="mdl-textfield__label" for="a_inv_num">Номер в описи</label>
                             </div>
                             </p>
                             <p>
@@ -29,16 +29,35 @@
                                 <input id="a_title" class="mdl-textfield__input" type="text" th:field="*{title}"/>
                                 <label class="mdl-textfield__label" for="a_title">Предмет</label>
                             </div>
-                            </p><p>
+                            </p>
+                            <div>
+                                <label for="a_siteobject_id">Объект</label>
+                                <p>
+                                    <select id="a_siteobject_id" th:field="*{siteobject_id}">
+                                        <option th:each="siteobject : ${siteobjects}" th:value="${siteobject.id}"
+                                                th:text="${siteobject.siteobject}"></option>
+                                    </select>
+                                </p>
+                            </div>
+                            <div>
+                                <label for="a_characteristic_id">Характеристика</label>
+                                <p>
+                                    <select id="a_characteristic_id" th:field="*{characteristic_id}">
+                                        <option th:each="characteristic : ${characteristics}" th:value="${characteristic.id}"
+                                                th:text="${characteristic.characteristic}"></option>
+                                    </select>
+                                </p>
+                            </div>
+                            <p>
                             <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
                                 <input id="a_descr" class="mdl-textfield__input" type="text" th:field="*{description}"/>
                                 <label class="mdl-textfield__label" for="a_descr">Описание</label>
                             </div>
                             </p><p>
                             <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                <input id="a_find_date" class="mdl-textfield__input" type="date"
-                                       th:field="*{findDateStr}"/>
-                                <label class="mdl-textfield__label" for="a_find_date">Дата находки</label>
+                                <input id="a_find_date" class="mdl-textfield__input" type="text"
+                                       th:field="*{find_date}"/>
+                                <label class="mdl-textfield__label" for="a_find_date">Дата находки(дд.мм.гггг)</label>
                             </div>
                             </p><p>
                             <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">

@@ -27,6 +27,7 @@ public class FieldInventoryByCharacteristicAEV extends AbstractXlsView {
                                       Workbook workbook,
                                       HttpServletRequest httpServletRequest,
                                       HttpServletResponse httpServletResponse) throws Exception {
+        httpServletResponse.setHeader("Content-Disposition", "inline; filename=fieldInventoryByCharacteristic.xls");
         Sheet sheet = workbook.createSheet("Опись предметов по характеристике");
 
         Row header = sheet.createRow(0);
